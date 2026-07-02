@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empire Habits ⚜️ | CE · Caminho do Empresário</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030303;--bg2:#080808;--surface:#0D0D0D;--surface2:#121212;
+  --border:#1C1C1C;--border2:#252525;
+  --gold:#C9A84C;--gold2:#E8C96A;
+  --gdim:rgba(201,168,76,0.08);--gbdr:rgba(201,168,76,0.28);
+  --white:#F5F2EC;--white2:#DDD8D0;--text:#9A9088;--muted:#484848;
+  --green:#4CAF50;--greenDim:rgba(76,175,80,0.1);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;padding-bottom:80px}
+
+/* BRAND */
+.brand{padding:20px 24px 0;display:flex;justify-content:space-between;align-items:center}
+.b-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.b-logo span{color:var(--white2)}
+.b-date{font-size:10px;letter-spacing:2px;color:var(--muted)}
+
+/* HERO */
+.hero{padding:28px 24px 0;text-align:center}
+.h-greeting{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.h-name{font-family:'Syne',sans-serif;font-size:clamp(22px,5vw,32px);font-weight:800;color:var(--white);margin-bottom:4px}
+.h-sub{font-size:12px;color:var(--muted)}
+
+/* XP BAR */
+.xp-section{padding:20px 24px}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.xp-level{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold);display:flex;align-items:center;gap:6px}
+.xp-val{font-size:10px;color:var(--muted)}
+.xp-track{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:3px;transition:width .8s cubic-bezier(.4,0,.2,1)}
+.xp-next{font-size:10px;color:var(--muted);margin-top:4px;text-align:right}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 24px 20px}
+.stat{padding:14px 8px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--white);line-height:1}
+.stat-n .g{color:var(--gold)}
+.stat-l{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+/* SECTION */
+.section{padding:0 24px 8px}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.sec-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold)}
+.sec-add{font-size:10px;letter-spacing:1px;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .2s;padding:4px}
+.sec-add:hover{color:var(--gold)}
+
+/* HABITS */
+.habits-list{display:flex;flex-direction:column;gap:8px;margin-bottom:24px}
+.habit{background:var(--surface);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;gap:14px;padding:16px;position:relative;overflow:hidden;transition:all .25s;cursor:pointer}
+.habit:hover{border-color:var(--border2)}
+.habit.done{background:var(--greenDim);border-color:rgba(76,175,80,.25)}
+.habit.done .h-name-t{color:rgba(245,242,236,.5);text-decoration:line-through}
+.habit.done .h-desc{opacity:.4}
+.habit-prog{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(76,175,80,.06);transition:width .5s ease;pointer-events:none}
+.habit.done .habit-prog{width:100%}
+.h-check{width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .25s;position:relative;z-index:1}
+.habit.done .h-check{background:var(--green);border-color:var(--green)}
+.h-check-icon{font-size:13px;opacity:0;transition:opacity .2s}
+.habit.done .h-check-icon{opacity:1}
+.h-info{flex:1;min-width:0;position:relative;z-index:1}
+.h-name-t{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--white);transition:all .25s}
+.h-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.h-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;position:relative;z-index:1;flex-shrink:0}
+.h-xp{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold)}
+.h-streak{font-size:10px;color:var(--muted)}
+.habit.done .h-xp{color:var(--green)}
+
+/* CONFETTI */
+.confetti-container{position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti-piece{position:absolute;width:8px;height:8px;opacity:0;animation:conffall 1s ease forwards}
+@keyframes conffall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(200px) rotate(720deg)}}
+
+/* ADD MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.show{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:28px;width:100%;max-width:400px;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gbdr),transparent)}
+.modal-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.modal-inp{width:100%;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;font-size:14px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color .3s;margin-bottom:10px}
+.modal-inp::placeholder{color:var(--muted)}
+.modal-inp:focus{border-color:var(--gbdr)}
+.modal-icons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.icon-opt{width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;cursor:pointer;transition:all .2s}
+.icon-opt:hover,.icon-opt.sel{border-color:var(--gold);background:var(--gdim)}
+.modal-xp{margin-bottom:16px}
+.modal-xp label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between}
+.modal-xp label span{color:var(--gold);font-family:'Syne',sans-serif;font-weight:800;font-size:12px}
+input[type=range].small{width:100%;-webkit-appearance:none;height:2px;background:var(--border2);border-radius:2px;outline:none}
+input[type=range].small::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--gold);cursor:pointer}
+.modal-btns{display:flex;gap:8px}
+.btn-modal-ok{flex:1;padding:13px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#030303;cursor:pointer;transition:all .3s}
+.btn-modal-ok:hover{transform:translateY(-1px)}
+.btn-modal-cancel{padding:13px 20px;background:transparent;border:1px solid var(--border);border-radius:3px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .3s}
+.btn-modal-cancel:hover{border-color:var(--border2);color:var(--white2)}
+
+/* QUOTE */
+.daily-quote{margin:0 24px 24px;padding:18px 20px;background:var(--gdim);border-left:2px solid var(--gold);border-radius:0 4px 4px 0}
+.dq-text{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--white);line-height:1.4;margin-bottom:4px}
+.dq-author{font-size:10px;color:var(--muted)}
+
+/* CALENDAR */
+.cal-section{padding:0 24px 24px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-day{aspect-ratio:1;border-radius:3px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--muted)}
+.cal-day.has{background:var(--gdim);border:1px solid var(--gbdr);color:var(--gold)}
+.cal-day.today{background:var(--gold);color:#030303;font-weight:800}
+.cal-day.empty{background:transparent}
+
+/* TOAST */
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--surface);border:1px solid var(--gbdr);border-radius:4px;padding:12px 20px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--gold);z-index:1000;transition:transform .4s cubic-bezier(.4,0,.2,1);white-space:nowrap;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(3,3,3,.97);border-top:1px solid var(--border);padding:10px 24px 16px;display:flex;justify-content:space-around;z-index:100}
+.nav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;transition:all .2s;padding:4px 12px}
+.nav-btn.active .nav-icon,.nav-btn:hover .nav-icon{color:var(--gold)}
+.nav-btn.active .nav-lbl,.nav-btn:hover .nav-lbl{color:var(--gold)}
+.nav-icon{font-size:20px;color:var(--muted);transition:color .2s}
+.nav-lbl{font-size:8px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);transition:color .2s;font-family:'Syne',sans-serif;font-weight:700}
+
+/* SCREENS */
+.scr{display:none;padding-top:4px}
+.scr.on{display:block}
+</style>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#C9A84C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Empire Habits">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Empire Habits ⚜️">
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+<div class="confetti-container" id="confetti"></div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">+ Novo Hábito</div>
+    <input class="modal-inp" id="m-name" placeholder="Nome do hábito...">
+    <input class="modal-inp" id="m-desc" placeholder="Descrição (opcional)...">
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px">Ícone</div>
+    <div class="modal-icons" id="modal-icons"></div>
+    <div class="modal-xp">
+      <label>XP por conclusão <span id="m-xp-val">+20 XP</span></label>
+      <input type="range" class="small" id="m-xp" min="5" max="100" step="5" value="20" oninput="document.getElementById('m-xp-val').textContent='+'+this.value+' XP'">
+    </div>
+    <div class="modal-btns">
+      <button class="btn-modal-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-modal-ok" onclick="addHabit()">Adicionar</button>
+    </div>
+  </div>
+</div>
+
+<div class="brand">
+  <div class="b-logo">CE ⚜️ <span>Habits</span></div>
+  <div class="b-date" id="today-date"></div>
+</div>
+
+<!-- HOME -->
+<div class="scr on" id="scr-home">
+  <div class="hero">
+    <div class="h-greeting" id="greeting">Bom dia</div>
+    <div class="h-name">Fabrício CE ⚜️</div>
+    <div class="h-sub" id="progress-text">Carregando...</div>
+  </div>
+
+  <div class="xp-section">
+    <div class="xp-top">
+      <div class="xp-level">⚡ <span id="level-name">Iniciante</span></div>
+      <div class="xp-val"><span id="xp-cur">0</span> / <span id="xp-next-val">200</span> XP</div>
+    </div>
+    <div class="xp-track"><div class="xp-fill" id="xp-fill"></div></div>
+    <div class="xp-next" id="xp-next-text"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n" id="s-streak">0<span class="g">🔥</span></div><div class="stat-l">Sequência</div></div>
+    <div class="stat"><div class="stat-n" id="s-done">0</div><div class="stat-l">Hoje</div></div>
+    <div class="stat"><div class="stat-n" id="s-total-xp">0</div><div class="stat-l">XP Total</div></div>
+    <div class="stat"><div class="stat-n" id="s-days">0</div><div class="stat-l">Dias</div></div>
+  </div>
+
+  <div class="daily-quote" id="daily-quote">
+    <div class="dq-text">Carregando reflexão do dia...</div>
+  </div>
+
+  <div class="section">
+    <div class="sec-header">
+      <div class="sec-title">Hábitos de hoje</div>
+      <button class="sec-add" onclick="openModal()">+ Adicionar</button>
+    </div>
+    <div class="habits-list" id="habits-list"></div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="scr" id="scr-progress">
+  <div style="padding:24px">
+    <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px">📊 Seu Progresso</div>
+
+    <div class="cal-section" style="padding:0 0 24px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Histórico dos últimos 28 dias</div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:20px;margin-bottom:16px">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Estatísticas gerais</div>
+      <div id="big-stats" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
+    </div>
+
+    <div style="background:var(--gdim);border:1px solid var(--gbdr);border-radius:4px;padding:18px;margin-bottom:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gold);margin-bottom:4px">Compartilhe seu progresso</div>
+      <div style="font-size:12px;color:var(--text);margin-bottom:12px">Mostre sua sequência e inspire outros a construir hábitos.</div>
+      <button onclick="shareProgress()" style="padding:11px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#030303;cursor:pointer">📲 Compartilhar</button>
+    </div>
+  </div>
+</div>
+
+<!-- RANKING -->
+<div class="scr" id="scr-ranking">
+  <div style="padding:24px">
+    <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:20px">👑 Ranking Empire</div>
+    <div id="ranking-list"></div>
+    <div style="margin-top:20px;padding:18px;background:var(--gdim);border:1px solid var(--gbdr);border-radius:4px;text-align:center">
+      <div style="font-size:12px;color:var(--text);margin-bottom:8px">Desafie seus amigos</div>
+      <button onclick="shareRanking()" style="padding:11px 20px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#030303;cursor:pointer">⚔️ Desafiar amigos</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav-home" onclick="showScr('home')"><span class="nav-icon">🏠</span><span class="nav-lbl">Home</span></button>
+  <button class="nav-btn" id="nav-progress" onclick="showScr('progress')"><span class="nav-icon">📊</span><span class="nav-lbl">Progresso</span></button>
+  <button class="nav-btn" id="nav-ranking" onclick="showScr('ranking')"><span class="nav-icon">👑</span><span class="nav-lbl">Ranking</span></button>
+</div>
+
+<script>
+/* STATE */
+const STORAGE_KEY='empire_habits_v2';
+let state=load();
+
+const LEVELS=[
+  {name:'Iniciante',xp:0,next:200},
+  {name:'Aprendiz',xp:200,next:500},
+  {name:'Executor',xp:500,next:1000},
+  {name:'Estrategista',xp:1000,next:2000},
+  {name:'Visionário',xp:2000,next:4000},
+  {name:'Empire Builder',xp:4000,next:8000},
+  {name:'Titan Founder ⚜️',xp:8000,next:Infinity},
+];
+
+const QUOTES=[
+  {t:"Silêncio agora. Resultado depois.",a:"Fabrício CE"},
+  {t:"Disciplina é a ponte entre metas e conquistas.",a:"Jim Rohn"},
+  {t:"Vença seus hábitos ou seus hábitos vão te vencer.",a:"Jack Ma"},
+  {t:"O sucesso é a soma de pequenos esforços repetidos dia após dia.",a:"Robert Collier"},
+  {t:"Cada dia é uma nova oportunidade de construir algo maior.",a:"Empire Builders ⚜️"},
+  {t:"Não estou competindo com ninguém. Estou construindo meu legado.",a:"Fabrício CE"},
+  {t:"Tudo posso naquele que me fortalece.",a:"Filipenses 4:13"},
+  {t:"A consistência mediana supera a genialidade inconsistente.",a:"Empire Builders ⚜️"},
+  {t:"Você se torna o que você faz repetidamente.",a:"Aristóteles"},
+  {t:"O caminho do empresário começa com um hábito.",a:"Fabrício CE"},
+];
+
+const DEFAULT_HABITS=[
+  {id:1,name:"Acordar cedo",desc:"Antes das 6h da manhã",icon:"🌅",xp:30,done:false,streak:0},
+  {id:2,name:"Exercício físico",desc:"Pelo menos 30 minutos",icon:"💪",xp:25,done:false,streak:0},
+  {id:3,name:"Leitura",desc:"10 páginas sobre negócios ou desenvolvimento",icon:"📚",xp:20,done:false,streak:0},
+  {id:4,name:"Meditação ou oração",desc:"15 minutos de foco espiritual",icon:"✝️",xp:20,done:false,streak:0},
+  {id:5,name:"Criar conteúdo",desc:"Postar no Instagram ou TikTok",icon:"📱",xp:35,done:false,streak:0},
+  {id:6,name:"Estudar mercado",desc:"Análise de negócios e investimentos",icon:"📈",xp:25,done:false,streak:0},
+  {id:7,name:"Sem redes sociais pela manhã",desc:"2 primeiras horas sem scroll",icon:"🧘",xp:15,done:false,streak:0},
+];
+
+const ICONS=['🌅','💪','📚','✝️','📱','📈','🧘','💰','🎯','🔥','⚡','🤝','🌍','⚜️','🏆','💡','🚀','👑'];
+
+function load(){
+  try{
+    const d=localStorage.getItem(STORAGE_KEY);
+    if(d)return JSON.parse(d);
+  }catch(e){}
+  return{
+    habits:DEFAULT_HABITS.map(h=>({...h})),
+    totalXP:0,streak:0,
+    lastDate:'',daysActive:0,
+    history:[],nextId:20,
+    selectedIcon:'⚜️'
+  };
+}
+
+function save(){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}catch(e){}
+}
+
+/* DAILY RESET */
+function checkDay(){
+  const today=new Date().toDateString();
+  if(state.lastDate!==today){
+    const wasYesterday=state.lastDate&&
+      new Date(state.lastDate).getTime()===new Date(today).getTime()-86400000;
+    if(wasYesterday&&state.habits.filter(h=>h.done).length>0){
+      state.streak++;
+    } else if(state.lastDate){
+      state.streak=0;
+    }
+    state.habits.forEach(h=>h.done=false);
+    state.history.push({date:today,done:state.habits.filter(h=>h.done).length});
+    if(state.history.length>60)state.history=state.history.slice(-60);
+    state.daysActive++;
+    state.lastDate=today;
+    save();
+  }
+}
+
+/* SCREENS */
+function showScr(name){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('scr-'+name).classList.add('on');
+  document.getElementById('nav-'+name).classList.add('active');
+  if(name==='progress')renderProgress();
+  if(name==='ranking')renderRanking();
+}
+
+/* TOAST */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+/* CONFETTI */
+function boom(el){
+  const rect=el.getBoundingClientRect();
+  const c=document.getElementById('confetti');
+  const colors=['#C9A84C','#E8C96A','#F5DFA0','#fff','#4CAF50'];
+  for(let i=0;i<16;i++){
+    const p=document.createElement('div');
+    p.className='confetti-piece';
+    p.style.cssText=`left:${rect.left+rect.width/2}px;top:${rect.top}px;background:${colors[i%colors.length]};animation-delay:${Math.random()*.2}s;transform:translate(${(Math.random()-0.5)*80}px,0)`;
+    c.appendChild(p);
+    setTimeout(()=>p.remove(),1500);
+  }
+}
+
+/* LEVEL */
+function getLevel(xp){
+  let lvl=LEVELS[0];
+  for(const l of LEVELS)if(xp>=l.xp)lvl=l;
+  return lvl;
+}
+
+/* RENDER HOME */
+function render(){
+  checkDay();
+  const now=new Date();
+  const h=now.getHours();
+  const greeting=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+  document.getElementById('greeting').textContent=greeting;
+  document.getElementById('today-date').textContent=now.toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long'});
+
+  const done=state.habits.filter(h=>h.done).length;
+  const total=state.habits.length;
+  document.getElementById('progress-text').textContent=`${done} de ${total} hábitos concluídos hoje`;
+
+  // XP
+  const lvl=getLevel(state.totalXP);
+  const nextLvl=LEVELS[LEVELS.indexOf(lvl)+1]||lvl;
+  const pct=lvl.next===Infinity?100:Math.round(((state.totalXP-lvl.xp)/(nextLvl.xp-lvl.xp))*100);
+  document.getElementById('level-name').textContent=lvl.name;
+  document.getElementById('xp-cur').textContent=state.totalXP;
+  document.getElementById('xp-next-val').textContent=nextLvl.xp===Infinity?'MAX':nextLvl.xp;
+  document.getElementById('xp-fill').style.width=pct+'%';
+  document.getElementById('xp-next-text').textContent=nextLvl.xp===Infinity?'Nível máximo atingido!':
+    `Faltam ${nextLvl.xp-state.totalXP} XP para ${nextLvl.name}`;
+
+  // Stats
+  document.getElementById('s-streak').innerHTML=`${state.streak}<span class="g">🔥</span>`;
+  document.getElementById('s-done').textContent=done;
+  document.getElementById('s-total-xp').textContent=state.totalXP;
+  document.getElementById('s-days').textContent=state.daysActive;
+
+  // Quote
+  const q=QUOTES[now.getDate()%QUOTES.length];
+  document.getElementById('daily-quote').innerHTML=`<div class="dq-text">"${q.t}"</div><div class="dq-author">— ${q.a}</div>`;
+
+  // Habits
+  const list=document.getElementById('habits-list');
+  list.innerHTML='';
+  if(!state.habits.length){
+    list.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px">Nenhum hábito ainda.<br>Adicione seu primeiro hábito acima.</div>';
+    return;
+  }
+  state.habits.forEach((h,i)=>{
+    const div=document.createElement('div');
+    div.className='habit'+(h.done?' done':'');
+    div.innerHTML=`
+      <div class="habit-prog"></div>
+      <div class="h-check">${h.done?'<span class="h-check-icon">✓</span>':''}</div>
+      <div class="h-info">
+        <div class="h-name-t">${h.icon} ${h.name}</div>
+        <div class="h-desc">${h.desc}</div>
+      </div>
+      <div class="h-right">
+        <div class="h-xp">${h.done?'✓':'+'+h.xp+' XP'}</div>
+        ${h.streak>0?`<div class="h-streak">${h.streak}🔥</div>`:''}
+      </div>`;
+    div.addEventListener('click',()=>toggleHabit(i,div));
+    list.appendChild(div);
+  });
+}
+
+function toggleHabit(idx,el){
+  const h=state.habits[idx];
+  h.done=!h.done;
+  if(h.done){
+    state.totalXP+=h.xp;
+    h.streak++;
+    boom(el);
+    const done=state.habits.filter(h=>h.done).length;
+    if(done===state.habits.length)showToast('🔥 Todos os hábitos concluídos! +50 XP bônus!');
+    else showToast(`+${h.xp} XP — ${h.name} ⚜️`);
+    if(done===state.habits.length)state.totalXP+=50;
+  } else {
+    state.totalXP=Math.max(0,state.totalXP-h.xp);
+    h.streak=Math.max(0,h.streak-1);
+  }
+  save();render();
+}
+
+/* MODAL */
+let selIcon='⚜️';
+function openModal(){
+  document.getElementById('m-name').value='';
+  document.getElementById('m-desc').value='';
+  document.getElementById('m-xp').value=20;
+  document.getElementById('m-xp-val').textContent='+20 XP';
+  selIcon='⚜️';
+  const ic=document.getElementById('modal-icons');
+  ic.innerHTML=ICONS.map(i=>`<div class="icon-opt${i===selIcon?' sel':''}" onclick="selIconClick(this,'${i}')">${i}</div>`).join('');
+  document.getElementById('modal').classList.add('show');
+  setTimeout(()=>document.getElementById('m-name').focus(),100);
+}
+function selIconClick(el,icon){
+  selIcon=icon;
+  document.querySelectorAll('.icon-opt').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+function addHabit(){
+  const name=document.getElementById('m-name').value.trim();
+  if(!name){document.getElementById('m-name').style.borderColor='rgba(220,60,60,.5)';return}
+  const desc=document.getElementById('m-desc').value.trim();
+  const xp=+document.getElementById('m-xp').value;
+  state.habits.push({id:state.nextId++,name,desc:desc||'Hábito Empire',icon:selIcon,xp,done:false,streak:0});
+  save();closeModal();render();showToast(`⚜️ "${name}" adicionado!`);
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+document.getElementById('m-name').addEventListener('keydown',e=>{if(e.key==='Enter')addHabit()});
+
+/* PROGRESS */
+function renderProgress(){
+  const today=new Date();
+  const grid=document.getElementById('cal-grid');
+  grid.innerHTML='';
+  for(let i=27;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const ds=d.toDateString();
+    const isToday=i===0;
+    const inHist=state.history.find(h=>h.date===ds);
+    const div=document.createElement('div');
+    div.className='cal-day'+(isToday?' today':inHist&&inHist.done>0?' has':'');
+    div.title=d.toLocaleDateString('pt-BR');
+    div.textContent=isToday?'⚜️':inHist&&inHist.done>0?'✓':'';
+    grid.appendChild(div);
+  }
+  const done=state.habits.filter(h=>h.done).length;
+  const total=state.habits.length;
+  const pct=total?Math.round((done/total)*100):0;
+  document.getElementById('big-stats').innerHTML=`
+    <div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--gold)">${state.streak}🔥</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px">Sequência atual</div>
+    </div>
+    <div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--white)">${state.totalXP}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px">XP Total</div>
+    </div>
+    <div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--white)">${state.daysActive}</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px">Dias Ativos</div>
+    </div>
+    <div style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:center">
+      <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--white)">${pct}%</div>
+      <div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:4px">Hoje</div>
+    </div>`;
+}
+
+/* RANKING */
+const FAKE_RANKING=[
+  {name:"Fabrício CE ⚜️",xp:state.totalXP,streak:state.streak,you:true},
+  {name:"Empire Builder #2",xp:3420,streak:14},
+  {name:"Empire Builder #3",xp:2890,streak:8},
+  {name:"Empire Builder #4",xp:1940,streak:5},
+  {name:"Empire Builder #5",xp:980,streak:3},
+];
+
+function renderRanking(){
+  const list=document.getElementById('ranking-list');
+  FAKE_RANKING[0].xp=state.totalXP;FAKE_RANKING[0].streak=state.streak;
+  const sorted=[...FAKE_RANKING].sort((a,b)=>b.xp-a.xp);
+  list.innerHTML=sorted.map((r,i)=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:16px;background:${r.you?'var(--gdim)':'var(--surface)'};border:1px solid ${r.you?'var(--gbdr)':'var(--border)'};border-radius:4px;margin-bottom:8px">
+      <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:${i<3?'var(--gold)':'var(--muted)'};min-width:28px">${i===0?'👑':i===1?'⚜️':i===2?'🔥':i+1}</div>
+      <div style="flex:1">
+        <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:${r.you?'var(--gold)':'var(--white)'}">${r.name}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${r.streak}🔥 sequência</div>
+      </div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:${r.you?'var(--gold)':'var(--white)'}">${r.xp} XP</div>
+    </div>`).join('');
+}
+
+function shareProgress(){
+  const lvl=getLevel(state.totalXP);
+  const text=`⚜️ EMPIRE HABITS — Meu progresso\n\nNível: ${lvl.name}\nXP Total: ${state.totalXP}\nSequência: ${state.streak} dias 🔥\n\nHábitos que pratico todo dia com o Empire Builders:\n📚 Leitura diária\n💪 Exercício físico\n✝️ Fé e oração\n📱 Conteúdo digital\n📈 Estudo de mercado\n\nBaixe o app: linktr.ee/caminhodoempresario\n\n@_fabricio_ce #EmpireHabits #EmpireBuilders`;
+  if(navigator.share)navigator.share({title:'Empire Habits ⚜️',text});
+  else navigator.clipboard.writeText(text).then(()=>showToast('📋 Copiado! Cole onde quiser.'));
+}
+
+function shareRanking(){
+  const text=`⚔️ DESAFIO Empire Habits!\n\nMinha sequência: ${state.streak} dias 🔥\nMeu XP: ${state.totalXP}\n\nVocê consegue superar?\n\nlinktr.ee/caminhodoempresario\n\n@_fabricio_ce #EmpireHabits`;
+  if(navigator.share)navigator.share({title:'Desafio Empire Habits',text});
+  else navigator.clipboard.writeText(text).then(()=>showToast('⚔️ Desafio copiado!'));
+}
+
+render();
+</script>
+
+<!-- PWA INSTALL -->
+<div id="install-banner" style="display:none;position:fixed;bottom:70px;left:16px;right:16px;z-index:200;background:#0D0D0D;border:1px solid rgba(201,168,76,.35);border-radius:6px;padding:16px;display:none;align-items:center;gap:12px;box-shadow:0 8px 32px rgba(0,0,0,.6)">
+  <div style="font-size:28px">⚜️</div>
+  <div style="flex:1">
+    <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#F5F2EC;margin-bottom:2px">Instalar Empire Habits</div>
+    <div style="font-size:11px;color:#484848">Adicionar à tela inicial como app</div>
+  </div>
+  <button id="install-btn" style="padding:9px 16px;background:linear-gradient(135deg,#C9A84C,#E8C96A);border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#030303;cursor:pointer">Instalar</button>
+  <button onclick="document.getElementById('install-banner').style.display='none'" style="background:none;border:none;color:#484848;cursor:pointer;font-size:18px;padding:4px">×</button>
+</div>
+
+<!-- NOTIFY PERMISSION -->
+<div id="notify-bar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(201,168,76,0.12);border-bottom:1px solid rgba(201,168,76,.25);padding:10px 20px;display:none;align-items:center;justify-content:space-between;gap:12px">
+  <div style="font-size:11px;color:#F5F2EC">🔔 Ativar lembretes diários de hábitos?</div>
+  <div style="display:flex;gap:8px">
+    <button onclick="requestNotify()" style="padding:6px 14px;background:linear-gradient(135deg,#C9A84C,#E8C96A);border:none;border-radius:2px;font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#030303;cursor:pointer">Ativar</button>
+    <button onclick="document.getElementById('notify-bar').style.display='none'" style="background:none;border:none;color:#484848;cursor:pointer;font-size:16px">×</button>
+  </div>
+</div>
+
+<script>
+// SERVICE WORKER
+if('serviceWorker' in navigator){
+  window.addEventListener('load', async () => {
+    try {
+      const reg = await navigator.serviceWorker.register('./sw.js');
+      console.log('SW registered:', reg.scope);
+      
+      // Show notify bar after 3s if not asked yet
+      setTimeout(() => {
+        if(Notification.permission === 'default'){
+          document.getElementById('notify-bar').style.display = 'flex';
+        }
+      }, 3000);
+    } catch(e) {
+      console.log('SW failed:', e);
+    }
+  });
+}
+
+// INSTALL PROMPT
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  setTimeout(() => {
+    document.getElementById('install-banner').style.display = 'flex';
+  }, 2000);
+});
+
+document.getElementById('install-btn').addEventListener('click', async () => {
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if(outcome === 'accepted') {
+    document.getElementById('install-banner').style.display = 'none';
+    showToast('⚜️ App instalado com sucesso!');
+  }
+  deferredPrompt = null;
+});
+
+window.addEventListener('appinstalled', () => {
+  document.getElementById('install-banner').style.display = 'none';
+  showToast('👑 Empire Habits instalado!');
+});
+
+// NOTIFICATIONS
+async function requestNotify() {
+  const perm = await Notification.requestPermission();
+  document.getElementById('notify-bar').style.display = 'none';
+  if(perm === 'granted') {
+    showToast('🔔 Lembretes ativados!');
+    scheduleReminder();
+  }
+}
+
+function scheduleReminder() {
+  // Daily reminder at 8am via SW push (simplified client-side)
+  if('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({
+      type: 'SCHEDULE_REMINDER',
+      time: '08:00'
+    });
+  }
+}
+
+// OFFLINE INDICATOR
+window.addEventListener('online', () => showToast('✅ Conexão restaurada'));
+window.addEventListener('offline', () => showToast('📴 Modo offline ativado'));
+</script>
+</body>
+</html>

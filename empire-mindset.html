@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMPIRE MINDSET ⚜️ | CE · Caminho do Empresário</title>
+<meta name="description" content="Sua mente será analisada. 25 perguntas que revelam seu nível real de mentalidade empreendedora.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030303;--bg2:#080808;--surface:#0D0D0D;--surface2:#121212;
+  --border:#1C1C1C;--border2:#252525;
+  --gold:#C9A84C;--gold2:#E8C96A;--gold3:#F5DFA0;
+  --gdim:rgba(201,168,76,0.08);--gmid:rgba(201,168,76,0.18);--gbdr:rgba(201,168,76,0.28);
+  --white:#F5F2EC;--white2:#DDD8D0;--text:#9A9088;--muted:#484848;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+#cd,#cr{position:fixed;z-index:9999;pointer-events:none;top:0;left:0}
+#cd div{width:7px;height:7px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%)}
+#cr div{width:34px;height:34px;border:1px solid rgba(201,168,76,.4);border-radius:50%;transform:translate(-50%,-50%);transition:left .1s,top .1s,width .3s,height .3s}
+#cr div.big{width:58px;height:58px;border-color:rgba(201,168,76,.18)}
+
+/* CANVAS */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.7}
+
+/* BRAND */
+.brand{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 40px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(3,3,3,.96),transparent)}
+.b-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.b-logo span{color:var(--white2)}
+.b-xp{font-size:10px;letter-spacing:2px;color:var(--muted)}
+.b-xp strong{color:var(--gold)}
+
+/* XP BAR */
+.xp-wrap{position:fixed;bottom:0;left:0;right:0;z-index:100;padding:8px 40px 14px;background:linear-gradient(to top,rgba(3,3,3,.97),transparent);display:none}
+.xp-wrap.on{display:block}
+.xp-row{display:flex;justify-content:space-between;margin-bottom:5px}
+.xp-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.xp-val{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold)}
+.xp-track{height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .7s cubic-bezier(.4,0,.2,1);width:0}
+
+/* SCREENS */
+.scr{position:relative;z-index:1;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:88px 24px 60px}
+.scr.on{display:flex}
+
+/* TOAST */
+.toast{position:fixed;top:74px;right:20px;z-index:300;background:var(--surface);border:1px solid var(--gbdr);border-radius:4px;padding:12px 16px;display:flex;align-items:center;gap:10px;transform:translateX(130%);transition:transform .4s cubic-bezier(.4,0,.2,1);max-width:270px;box-shadow:0 8px 32px rgba(0,0,0,.6)}
+.toast.on{transform:translateX(0)}
+.ti{font-size:18px}.tt{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold)}.ts{font-size:11px;color:var(--text);margin-top:1px}
+
+/* ══ INTRO ══ */
+#si{text-align:center}
+.emblem{width:96px;height:96px;border-radius:50%;border:1px solid var(--gbdr);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;position:relative;animation:spin 22s linear infinite}
+.emblem::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.1)}
+.emblem::after{content:'';position:absolute;inset:-11px;border-radius:50%;border:1px solid rgba(201,168,76,.05)}
+.emblem-i{font-size:34px;animation:spin 22s linear reverse infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.eyebrow{font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:0;animation:up .8s .2s ease forwards}
+.i-title{font-family:'Syne',sans-serif;font-size:clamp(42px,9vw,82px);font-weight:800;color:var(--white);letter-spacing:-2px;line-height:.88;margin-bottom:10px;opacity:0;animation:up .8s .3s ease forwards}
+.i-title .g{color:var(--gold)}
+.i-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,2.5vw,19px);color:var(--text);margin-bottom:0;opacity:0;animation:up .8s .4s ease forwards}
+
+/* NARRATIVE */
+.narrative{max-width:500px;margin:32px auto 40px;opacity:0;animation:up .8s .5s ease forwards}
+.nline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,2.5vw,21px);color:var(--white2);line-height:1.65;margin-bottom:5px;opacity:0;transform:translateY(8px);transition:opacity .55s ease,transform .55s ease}
+.nline.show{opacity:1;transform:translateY(0)}
+.nline.accent{color:var(--gold);font-size:clamp(16px,3vw,23px);font-weight:600}
+.nline.final{color:var(--white);font-size:clamp(17px,3vw,24px);font-weight:600;margin-top:12px}
+
+.i-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:380px;margin:0 auto 32px;opacity:0;animation:up .8s .6s ease forwards}
+.is{flex:1;padding:14px 8px;text-align:center;border-right:1px solid var(--border)}
+.is:last-child{border-right:none}
+.is-n{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);line-height:1}
+.is-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+.btn-start{display:inline-flex;align-items:center;gap:12px;padding:17px 44px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#030303;cursor:pointer;transition:all .3s;opacity:0;animation:up .8s .7s ease forwards;position:relative;overflow:hidden}
+.btn-start::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold2),var(--gold3));opacity:0;transition:opacity .3s}
+.btn-start:hover::before{opacity:1}
+.btn-start:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,168,76,.3)}
+.btn-start span{position:relative;z-index:1}
+
+/* ══ QUIZ ══ */
+#sq{padding:100px 24px 80px;align-items:stretch}
+.q-wrap{width:100%;max-width:640px;margin:0 auto}
+
+/* PROGRESS */
+.prog{margin-bottom:28px}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.prog-cat{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.prog-num{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white)}
+.prog-track{height:2px;background:var(--border2);border-radius:2px;overflow:hidden;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .6s cubic-bezier(.4,0,.2,1)}
+.prog-track::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);animation:shim 2.5s ease infinite}
+@keyframes shim{to{left:140%}}
+
+/* STREAK */
+.streak-bar{display:flex;gap:6px;margin-bottom:20px;justify-content:center}
+.streak-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:all .3s}
+.streak-dot.lit{background:var(--gold);box-shadow:0 0 8px rgba(201,168,76,.5)}
+.streak-dot.fire{background:var(--gold2);box-shadow:0 0 12px rgba(232,201,106,.7);animation:fire .6s ease infinite alternate}
+@keyframes fire{from{transform:scale(1)}to{transform:scale(1.4)}}
+
+/* CARD */
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:32px 28px;position:relative;overflow:hidden}
+.qcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gbdr),transparent)}
+.q-badge{display:inline-flex;align-items:center;gap:6px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gbdr);padding:4px 12px;border-radius:2px;margin-bottom:18px}
+.q-text{font-family:'Syne',sans-serif;font-size:clamp(17px,3vw,23px);font-weight:800;color:var(--white);line-height:1.2;margin-bottom:26px}
+.q-opts{display:flex;flex-direction:column;gap:8px}
+
+/* OPTIONS */
+.opt{padding:15px 18px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all .2s;text-align:left;width:100%;position:relative;overflow:hidden}
+.opt::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--gdim),transparent);transition:width .3s}
+.opt:hover::before{width:100%}
+.opt:hover{border-color:var(--gbdr);transform:translateX(5px)}
+.opt:hover .ol{background:var(--gold);color:#030303}
+.opt:hover .ot{color:var(--white)}
+.opt.picked{border-color:var(--gold);background:var(--gdim)}
+.opt.picked .ol{background:var(--gold);color:#030303}
+.opt.picked .ot{color:var(--white)}
+.ol{width:27px;height:27px;border-radius:2px;background:var(--border2);font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;position:relative;z-index:1}
+.ot{font-size:14px;color:var(--text);transition:color .2s;position:relative;z-index:1;line-height:1.5}
+
+/* TIMER BAR */
+.timer-wrap{margin-bottom:16px}
+.timer-track{height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.timer-fill{height:100%;background:linear-gradient(90deg,#4CAF50,var(--gold),#f44336);width:100%;transition:width linear}
+
+/* FACT BOX */
+.fact-box{margin-top:16px;padding:14px 16px;background:var(--gdim);border:1px solid var(--gbdr);border-radius:4px;font-size:12px;color:rgba(201,168,76,.8);line-height:1.6;display:none}
+.fact-box.show{display:block}
+.fact-box strong{color:var(--gold)}
+
+/* ══ ANALYZING ══ */
+#sa{text-align:center}
+.an-ring{width:100px;height:100px;border-radius:50%;border:1px solid var(--gbdr);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;position:relative}
+.an-ring::before{content:'';position:absolute;inset:0;border-radius:50%;border-top:2px solid var(--gold);animation:spin .8s linear infinite}
+.an-pct{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold)}
+.an-title{font-family:'Syne',sans-serif;font-size:clamp(20px,4vw,28px);font-weight:800;color:var(--white);margin-bottom:16px}
+.an-steps{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:20px auto 0}
+.as{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font-size:12px;color:var(--muted);opacity:0;transform:translateX(-10px);transition:opacity .5s,transform .5s,color .3s,border-color .3s}
+.as.done{opacity:1;transform:translateX(0);color:var(--text)}
+.as.act{border-color:var(--gbdr);color:var(--gold);opacity:1;transform:translateX(0)}
+.as-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;transition:background .3s}
+.as.done .as-dot{background:var(--gold)}
+.as.act .as-dot{background:var(--gold);box-shadow:0 0 6px var(--gold)}
+
+/* ══ RESULT ══ */
+#sr{padding:88px 24px 56px;text-align:center}
+.r-inner{width:100%;max-width:620px}
+.r-glow{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:650px;height:650px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.07) 0%,transparent 65%);pointer-events:none;animation:gpulse 5s ease-in-out infinite}
+@keyframes gpulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+
+.r-badge{width:104px;height:104px;border-radius:50%;border:1px solid var(--gbdr);background:var(--gdim);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:42px;position:relative}
+.r-badge::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.12)}
+.r-rare{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.r-level{font-family:'Syne',sans-serif;font-size:clamp(26px,5vw,44px);font-weight:800;color:var(--white);line-height:1;margin-bottom:6px}
+.r-level .g{color:var(--gold)}
+.r-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,2.5vw,18px);color:var(--text);margin-bottom:26px}
+
+/* SVG RING */
+.score-ring{width:130px;height:130px;border-radius:50%;margin:0 auto 22px;position:relative;display:flex;align-items:center;justify-content:center}
+.score-svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.score-track{fill:none;stroke:var(--border2);stroke-width:3}
+.score-arc{fill:none;stroke:url(#gg2);stroke-width:3;stroke-linecap:round;stroke-dasharray:283;stroke-dashoffset:283;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+.score-inside{text-align:center}
+.score-num{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--gold);line-height:1}
+.score-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+.r-rarity{padding:12px 18px;background:var(--gdim);border:1px solid var(--gbdr);border-radius:3px;margin-bottom:22px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gold)}
+.r-desc{font-size:14px;color:var(--text);line-height:1.9;text-align:left;padding:22px 20px;background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:20px}
+.r-desc strong{color:var(--white);font-weight:500}
+
+/* BARS */
+.r-bars{margin-bottom:20px;text-align:left}
+.rb-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.rb{margin-bottom:12px}
+.rb-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.rb-l{font-size:12px;color:var(--white2)}
+.rb-n{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold)}
+.rb-track{height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.rb-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* TRAITS */
+.r-traits{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.rt{padding:18px 16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:left;transition:border-color .3s}
+.rt:hover{border-color:var(--gbdr)}
+.rt-i{font-size:20px;margin-bottom:8px}
+.rt-n{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white);margin-bottom:4px}
+.rt-v{font-size:11px;color:var(--text);line-height:1.5}
+
+/* MEDALS */
+.r-medals{margin-bottom:20px}
+.med-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.med-grid{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.med{padding:8px 14px;background:var(--surface);border:1px solid var(--border);border-radius:3px;font-size:11px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.med.on{border-color:var(--gbdr);color:var(--gold)}
+
+/* QUOTE */
+.r-quote{padding:22px;background:var(--gdim);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;margin-bottom:24px;text-align:left}
+.r-quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,2.5vw,20px);color:var(--white);line-height:1.4}
+.r-quote p span{color:var(--gold)}
+
+/* SHARE CARD */
+.share-card{margin-bottom:20px;padding:20px;background:var(--surface2);border:1px solid var(--border);border-radius:4px;text-align:left}
+.sc-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.sc-preview{font-size:12px;color:var(--text);line-height:1.7;white-space:pre-line}
+
+/* BTNS */
+.r-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.btn-g{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#030303;cursor:pointer;transition:all .3s}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.28)}
+.btn-o{width:100%;padding:14px;background:transparent;border:1px solid var(--border2);border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .3s}
+.btn-o:hover{border-color:var(--gbdr);color:var(--gold)}
+.btn-c{width:100%;padding:14px;background:transparent;border:1px solid var(--gbdr);border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all .3s;text-decoration:none;display:block}
+.btn-c:hover{background:var(--gdim)}
+
+.r-foot{padding-top:16px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:1px;text-align:center}
+.r-foot a{color:var(--gold);text-decoration:none}
+
+/* ANIMS */
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:520px){
+  .qcard{padding:22px 16px}
+  .r-traits{grid-template-columns:1fr}
+  .brand{padding:16px 20px}
+  .xp-wrap{padding:7px 20px 12px}
+}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div id="cd"><div></div></div>
+<div id="cr"><div></div></div>
+
+<div class="toast" id="toast">
+  <span class="ti" id="ti">🏆</span>
+  <div><div class="tt" id="tt"></div><div class="ts" id="ts"></div></div>
+</div>
+
+<div class="brand">
+  <div class="b-logo">CE ⚜️ <span>Empire Builders</span></div>
+  <div class="b-xp">XP: <strong id="xp-n">0</strong></div>
+</div>
+
+<div class="xp-wrap" id="xpw">
+  <div class="xp-row"><span class="xp-lbl">⚡ Experiência</span><span class="xp-val" id="xp-v">0 XP</span></div>
+  <div class="xp-track"><div class="xp-fill" id="xp-f"></div></div>
+</div>
+
+<!-- INTRO -->
+<div class="scr on" id="si">
+  <div class="emblem"><div class="emblem-i">⚜️</div></div>
+  <div class="eyebrow">CE · Caminho do Empresário · 2026</div>
+  <h1 class="i-title">EMPIRE<br><span class="g">MINDSET</span> ⚜️</h1>
+  <p class="i-sub">A análise que vai revelar sua mente.</p>
+  <div class="narrative">
+    <div class="nline">"Nem todos nasceram para construir um império.</div>
+    <div class="nline">A maioria segue caminhos já traçados.</div>
+    <div class="nline">Poucos questionam.</div>
+    <div class="nline">Menos ainda criam.</div>
+    <div class="nline accent">E uma minoria extremamente rara muda o mundo.</div>
+    <div class="nline final">Hoje iremos analisar sua mente."</div>
+  </div>
+  <div class="i-stats">
+    <div class="is"><div class="is-n">25</div><div class="is-l">Questões</div></div>
+    <div class="is"><div class="is-n">10</div><div class="is-l">Categorias</div></div>
+    <div class="is"><div class="is-n">5</div><div class="is-l">Perfis</div></div>
+    <div class="is"><div class="is-n">⏱</div><div class="is-l">Timer</div></div>
+  </div>
+  <button class="btn-start" id="btn-start"><span>⚜️ Iniciar Análise</span></button>
+</div>
+
+<!-- QUIZ -->
+<div class="scr" id="sq">
+  <div class="q-wrap">
+    <div class="prog">
+      <div class="prog-top">
+        <span class="prog-cat" id="pcl"></span>
+        <span class="prog-num" id="pnl">1 / 25</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+    </div>
+    <div class="streak-bar" id="streak-bar"></div>
+    <div class="timer-wrap"><div class="timer-track"><div class="timer-fill" id="timer-fill"></div></div></div>
+    <div class="qcard" id="qcard">
+      <div class="q-badge" id="qbadge"></div>
+      <div class="q-text" id="qtext"></div>
+      <div class="q-opts" id="qopts"></div>
+    </div>
+    <div class="fact-box" id="factbox"></div>
+  </div>
+</div>
+
+<!-- ANALYZING -->
+<div class="scr" id="sa">
+  <div class="an-ring"><div class="an-pct" id="an-pct">0%</div></div>
+  <div class="an-title">Analisando sua mente...</div>
+  <div class="an-steps">
+    <div class="as"><div class="as-dot"></div>Processando padrões de mentalidade</div>
+    <div class="as"><div class="as-dot"></div>Avaliando inteligência financeira</div>
+    <div class="as"><div class="as-dot"></div>Medindo capacidade de liderança</div>
+    <div class="as"><div class="as-dot"></div>Calculando potencial de execução</div>
+    <div class="as"><div class="as-dot"></div>Determinando seu nível Empire</div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="scr" id="sr">
+  <div class="r-glow"></div>
+  <div class="r-inner">
+    <div class="r-badge" id="rbadge">⚜️</div>
+    <div class="r-rare" id="rrare"></div>
+    <div class="r-level" id="rlevel"></div>
+    <div class="r-tagline" id="rtagline"></div>
+    <div class="score-ring">
+      <svg class="score-svg" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="gg2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#C9A84C"/>
+            <stop offset="100%" stop-color="#E8C96A"/>
+          </linearGradient>
+        </defs>
+        <circle class="score-track" cx="50" cy="50" r="45"/>
+        <circle class="score-arc" id="sarc" cx="50" cy="50" r="45"/>
+      </svg>
+      <div class="score-inside">
+        <div class="score-num" id="snum">0%</div>
+        <div class="score-lbl">Empire Score</div>
+      </div>
+    </div>
+    <div class="r-rarity" id="rrity"></div>
+    <div class="r-desc" id="rdesc"></div>
+    <div class="r-bars"><div class="rb-title">Análise por categoria</div><div id="rbars"></div></div>
+    <div class="r-traits" id="rtraits"></div>
+    <div class="r-medals"><div class="med-title">Conquistas desbloqueadas</div><div class="med-grid" id="medals"></div></div>
+    <div class="r-quote" id="rquote"></div>
+    <div class="share-card"><div class="sc-title">Seu resultado para compartilhar</div><div class="sc-preview" id="share-preview"></div></div>
+    <div class="r-btns">
+      <button class="btn-g" onclick="shareResult()">📲 Compartilhar resultado</button>
+      <button class="btn-o" onclick="challengeFriend()">⚔️ Desafiar um amigo</button>
+      <a href="https://linktr.ee/caminhodoempresario" target="_blank" class="btn-c">⚜️ Entrar para a Comunidade CE</a>
+      <button class="btn-o" onclick="restart()">↺ Refazer teste</button>
+    </div>
+    <div class="r-foot">por <a href="https://www.instagram.com/_fabricio_ce" target="_blank">Fabrício CE</a> · <a href="https://linktr.ee/caminhodoempresario" target="_blank">Empire Builders</a> · 2026</div>
+  </div>
+</div>
+
+<script>
+/* ── CANVAS ── */
+(function(){
+  const c=document.getElementById('bgc'),x=c.getContext('2d');
+  let W,H,P=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  for(let i=0;i<55;i++)P.push({x:Math.random()*1e4,X:Math.random()*2e3,Y:Math.random()*2e3,vx:(Math.random()-.5)*.13,vy:-(Math.random()*.28+.05),o:Math.random()*.38+.05,r:Math.random()*1.5+.3});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{
+      if(!p.X||p.X>W*2)p.X=Math.random()*W;
+      if(!p.Y||p.Y>H*2)p.Y=Math.random()*H;
+      x.beginPath();x.arc(p.X,p.Y,p.r,0,Math.PI*2);
+      x.fillStyle=`rgba(201,168,76,${p.o})`;x.fill();
+      p.X+=p.vx;p.Y+=p.vy;
+      if(p.Y<-5){p.Y=H+5;p.X=Math.random()*W}
+      if(p.X<0)p.X=W;if(p.X>W)p.X=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ── CURSOR ── */
+const CD=document.getElementById('cd'),CR=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;CD.style.left=mx+'px';CD.style.top=my+'px'});
+(function ar(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;CR.style.left=rx+'px';CR.style.top=ry+'px';requestAnimationFrame(ar)})();
+document.querySelectorAll('button,a,.opt').forEach(el=>{
+  el.addEventListener('mouseenter',()=>CR.querySelector('div').classList.add('big'));
+  el.addEventListener('mouseleave',()=>CR.querySelector('div').classList.remove('big'));
+});
+
+/* ── AUDIO ── */
+const AC2=window.AudioContext||window.webkitAudioContext;let ac2;
+function iAudio(){if(!ac2&&AC2)ac2=new AC2()}
+function tone(f,d,t='sine',v=.07){
+  if(!ac2)return;
+  try{const o=ac2.createOscillator(),g=ac2.createGain();o.connect(g);g.connect(ac2.destination);
+  o.frequency.value=f;o.type=t;g.gain.setValueAtTime(0,ac2.currentTime);
+  g.gain.linearRampToValueAtTime(v,ac2.currentTime+.01);
+  g.gain.exponentialRampToValueAtTime(.001,ac2.currentTime+d);
+  o.start();o.stop(ac2.currentTime+d);}catch(e){}
+}
+function sClick(){tone(440,.12,'sine',.06);setTimeout(()=>tone(550,.09,'sine',.04),70)}
+function sGood(){[523,659,784].forEach((f,i)=>setTimeout(()=>tone(f,.18,'sine',.05),i*70))}
+function sBad(){tone(220,.25,'sawtooth',.04)}
+function sWin(){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>tone(f,.22,'sine',.055),i*85))}
+function sMilestone(){[659,784,1047].forEach((f,i)=>setTimeout(()=>tone(f,.2,'sine',.07),i*100))}
+
+/* ── TOAST ── */
+function toast(icon,title,sub){
+  const t=document.getElementById('toast');
+  document.getElementById('ti').textContent=icon;
+  document.getElementById('tt').textContent=title;
+  document.getElementById('ts').textContent=sub;
+  t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3200);
+}
+
+/* ── XP ── */
+let xp=0;
+function addXP(v){
+  xp+=v;
+  document.getElementById('xp-n').textContent=xp;
+  document.getElementById('xp-v').textContent=xp+' XP';
+  document.getElementById('xp-f').style.width=Math.min((xp/1000)*100,100)+'%';
+}
+
+/* ── SCREENS ── */
+function show(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+/* ── QUESTIONS ── */
+const QS=[
+  {cat:"🧠 Mentalidade",icon:"🧠",q:"Você acorda cedo mesmo sem ninguém te obrigar?",fact:"💡 97% dos CEOs de sucesso têm rotina matinal antes das 6h.",
+   opts:[{t:"Todo dia. Minha rotina não negocia.",v:4},{t:"Na maioria dos dias.",v:3},{t:"Depende do meu humor.",v:1},{t:"Só quando sou obrigado.",v:0}]},
+  {cat:"⚡ Execução",icon:"⚡",q:"Quando você tem uma ideia poderosa, qual é sua primeira ação?",fact:"💡 Empresários de alto nível executam dentro de 24h. A maioria espera semanas.",
+   opts:[{t:"Anoto e começo a agir ainda hoje.",v:4},{t:"Planejo com cuidado antes de agir.",v:3},{t:"Compartilho e espero feedback.",v:1},{t:"Fico pensando por semanas.",v:0}]},
+  {cat:"💰 Finanças",icon:"💰",q:"Como você trata o dinheiro que entra?",fact:"💡 Warren Buffett investe primeiro e gasta o que sobra. A maioria faz o oposto.",
+   opts:[{t:"Ferramenta. Reinvisto para multiplicar.",v:4},{t:"Equilíbrio entre guardar e gastar.",v:3},{t:"Pago o que precisa e o resto some.",v:1},{t:"Gasto antes de sobrar.",v:0}]},
+  {cat:"🔥 Resiliência",icon:"🔥",q:"Você falhou publicamente. O que acontece?",fact:"💡 Steve Jobs foi demitido da Apple. Voltou e a transformou na maior empresa do mundo.",
+   opts:[{t:"Analiso, aprendo e recomeco mais forte.",v:4},{t:"Demoro mas me levanto.",v:3},{t:"Fico abalado por muito tempo.",v:1},{t:"Abandono e busco algo mais seguro.",v:0}]},
+  {cat:"👑 Liderança",icon:"👑",q:"Quando um grupo precisa de direção, você:",fact:"💡 Líderes não esperam permissão. Eles criam o caminho.",
+   opts:[{t:"Tomo a frente naturalmente.",v:4},{t:"Contribuo e apoio quem lidera.",v:3},{t:"Aguardo alguém assumir.",v:1},{t:"Prefiro ficar de fora.",v:0}]},
+  {cat:"📚 Aprendizado",icon:"📚",q:"Nos últimos 30 dias, quanto você estudou sobre negócios?",fact:"💡 Elon Musk lê 2 livros por dia. Bill Gates, 50 por ano.",
+   opts:[{t:"Todo dia sem exceção.",v:4},{t:"Algumas vezes por semana.",v:3},{t:"Raramente, só o que aparece.",v:1},{t:"Não estudei.",v:0}]},
+  {cat:"🎯 Foco",icon:"🎯",q:"Você sabe exatamente o que quer construir nos próximos 12 meses?",fact:"💡 Harvard: pessoas com metas escritas ganham 10x mais que as sem metas.",
+   opts:[{t:"Sim. Metas claras e plano de ação.",v:4},{t:"Tenho uma visão geral.",v:3},{t:"Quero mudar mas não sei como.",v:1},{t:"Não faço ideia. Vou vivendo.",v:0}]},
+  {cat:"⚔️ Coragem",icon:"⚔️",q:"Uma oportunidade arriscada aparece. Você:",fact:"💡 Jeff Bezos: 'No futuro, vou me arrepender mais das coisas que não fiz do que das que fiz.'",
+   opts:[{t:"Calculo o risco e age rápido.",v:4},{t:"Pesquiso bastante antes de decidir.",v:3},{t:"Hesito e perco o timing.",v:1},{t:"Evito riscos sempre.",v:0}]},
+  {cat:"🌐 Visão",icon:"🌐",q:"Como você enxerga sua vida daqui 10 anos?",fact:"💡 Visão de longo prazo é o maior diferencial competitivo de líderes como Bezos e Musk.",
+   opts:[{t:"Com clareza total. Já trabalho para esse futuro.",v:4},{t:"Tenho um sonho, ainda impreciso.",v:3},{t:"Torço para estar bem, sem plano.",v:1},{t:"Não penso nisso.",v:0}]},
+  {cat:"🧘 Controle",icon:"🧘",q:"Sob pressão extrema, você:",fact:"💡 O controle emocional é mais decisivo para o sucesso do que o QI, segundo Daniel Goleman.",
+   opts:[{t:"Fico mais focado. Pressão ativa meu melhor.",v:4},{t:"Mantenho a calma com esforço.",v:3},{t:"Fico ansioso mas continuo.",v:1},{t:"Trava e paralisa.",v:0}]},
+  {cat:"🚀 Inovação",icon:"🚀",q:"Diante de um problema sem solução óbvia, você:",fact:"💡 Elon Musk usa 'raciocínio de primeiros princípios' — questiona tudo do zero.",
+   opts:[{t:"Crio abordagens que ninguém tentou.",v:4},{t:"Adapto soluções existentes.",v:3},{t:"Busco alguém que já resolveu.",v:1},{t:"Desisto se não houver solução clara.",v:0}]},
+  {cat:"💡 Estratégia",icon:"💡",q:"Ao tomar uma decisão importante, você pensa:",fact:"💡 Bezos toma decisões pensando nos próximos 10 anos. Isso criou a Amazon.",
+   opts:[{t:"No impacto dos próximos 10 anos.",v:4},{t:"No que acontece nos próximos 12 meses.",v:3},{t:"No que resolve o problema agora.",v:1},{t:"No que parece certo neste momento.",v:0}]},
+  {cat:"👥 Ambiente",icon:"👥",q:"As pessoas ao seu redor te elevam ou limitam?",fact:"💡 Jim Rohn: 'Você é a média das 5 pessoas com quem passa mais tempo.'",
+   opts:[{t:"Me elevam. Escolhi meu ambiente com cuidado.",v:4},{t:"Algumas me elevam, outras não.",v:3},{t:"Me limitam mas não mudo.",v:1},{t:"Me limitam muito.",v:0}]},
+  {cat:"✝️ Propósito",icon:"✝️",q:"O que te mantém em movimento quando tudo parece impossível?",fact:"💡 Viktor Frankl: 'Quem tem um porquê para viver suporta quase qualquer como.'",
+   opts:[{t:"Propósito maior do que eu. Fé inabalável.",v:4},{t:"A vontade de provar para mim mesmo.",v:3},{t:"Medo de fracassar.",v:1},{t:"Nada específico. Vou na inércia.",v:0}]},
+  {cat:"💰 Finanças",icon:"💰",q:"Você investe parte do que ganha regularmente?",fact:"💡 Investir R$300/mês por 30 anos com 10% a.a. = R$678.000.",
+   opts:[{t:"Sim. Dinheiro parado é dinheiro morrendo.",v:4},{t:"Às vezes, quando sobra.",v:3},{t:"Ainda não, mas planejo.",v:1},{t:"Não penso nisso.",v:0}]},
+  {cat:"⚡ Execução",icon:"⚡",q:"Qual é sua relação com a perfeição?",fact:"💡 Reid Hoffman (LinkedIn): 'Se não se envergonha da sua versão 1.0, lançou tarde demais.'",
+   opts:[{t:"Feito imperfeito supera perfeito que nunca sai.",v:4},{t:"Busco qualidade mas não me paraliso.",v:3},{t:"Espero estar pronto para agir.",v:1},{t:"Só apresento algo perfeito.",v:0}]},
+  {cat:"🔥 Resiliência",icon:"🔥",q:"Você se comprometeu com algo difícil. A maioria desistiu. Você:",fact:"💡 Estudo de Stanford: a perseverança ('grit') prediz sucesso melhor que talento.",
+   opts:[{t:"Continuo. Compromisso não é negociável.",v:4},{t:"Reavaliei se vale a pena.",v:3},{t:"Fiquei tentado a desistir.",v:1},{t:"Desisti junto.",v:0}]},
+  {cat:"👑 Liderança",icon:"👑",q:"Como você desenvolve as pessoas ao seu redor?",fact:"💡 Os melhores líderes multiplicam líderes — não seguidores.",
+   opts:[{t:"Ativamente. Levo outros para cima comigo.",v:4},{t:"Compartilho conhecimento quando perguntam.",v:3},{t:"Foco no meu crescimento primeiro.",v:1},{t:"Não penso muito nisso.",v:0}]},
+  {cat:"🧠 Mentalidade",icon:"🧠",q:"Qual dessas frases mais representa você agora?",fact:"💡 A mentalidade que você tem hoje foi programada pelo seu ambiente. Ela pode ser reprogramada.",
+   opts:[{t:"Construo o caminho enquanto ando.",v:4},{t:"Planejo antes de agir.",v:3},{t:"Espero a hora certa.",v:1},{t:"As coisas acontecem como devem.",v:0}]},
+  {cat:"🌐 Visão",icon:"🌐",q:"Você pensa nos seus projetos como sistemas ou como tarefas?",fact:"💡 Sistemas criam liberdade. Tarefas criam escravidão. A diferença é a mentalidade.",
+   opts:[{t:"Sistemas que funcionam sem mim.",v:4},{t:"Estruturas que estou construindo.",v:3},{t:"Tarefas que preciso fazer.",v:1},{t:"Ainda não tenho projetos estruturados.",v:0}]},
+  {cat:"🎯 Foco",icon:"🎯",q:"Com quantos projetos você trabalha ao mesmo tempo?",fact:"💡 Steve Jobs cortou 70% dos produtos da Apple ao voltar. O foco salvou a empresa.",
+   opts:[{t:"Um com obsessão total.",v:4},{t:"Dois ou três com equilíbrio.",v:3},{t:"Muitos, mas nenhum 100%.",v:1},{t:"Começo vários e termino poucos.",v:0}]},
+  {cat:"⚔️ Coragem",icon:"⚔️",q:"Se soubesse que vai falhar 3 vezes antes do sucesso, começaria assim mesmo?",fact:"💡 Thomas Edison falhou mais de 10.000 vezes antes de inventar a lâmpada.",
+   opts:[{t:"Sim. O fracasso faz parte do processo.",v:4},{t:"Sim, mas com mais cautela.",v:3},{t:"Hesitaria bastante.",v:1},{t:"Não arriscaria.",v:0}]},
+  {cat:"🚀 Inovação",icon:"🚀",q:"Diante de uma indústria estagnada, você:",fact:"💡 Mercados estagnados são oportunidades disfarçadas. Uber viu no táxi. Airbnb viu nos hotéis.",
+   opts:[{t:"Vejo a oportunidade de redefinir tudo.",v:4},{t:"Busco uma fatia do que já existe.",v:3},{t:"Evito competir com quem já está.",v:1},{t:"Não olho para isso.",v:0}]},
+  {cat:"🧘 Controle",icon:"🧘",q:"Alguém te critica duramente na frente de todos. Você:",fact:"💡 Marcus Aurelius: 'Você tem poder sobre sua mente, não sobre eventos externos. Perceba isso e encontrará força.'",
+   opts:[{t:"Absorvo o que é válido, descarto o resto.",v:4},{t:"Fico incomodado mas reflito depois.",v:3},{t:"Fico abalado por um tempo.",v:1},{t:"Reajo na hora e me arrependo.",v:0}]},
+  {cat:"✝️ Legado",icon:"✝️",q:"Seu legado para o mundo será:",fact:"💡 Os maiores impérios da história foram construídos por pessoas que pensaram além de si mesmas.",
+   opts:[{t:"Algo que muda a vida de muitos. Já trabalho para isso.",v:4},{t:"Uma empresa ou obra que sobreviva a mim.",v:3},{t:"Uma vida bem vivida para minha família.",v:1},{t:"Não pensei nisso ainda.",v:0}]}
+];
+
+const RESULTS=[
+  {min:0,max:25,badge:"🌱",level:"Sonhador",tagline:"Você possui potencial. Falta ação.",rare:"Você está entre 60% que ainda estão acordando.",rarity:60,
+   desc:"Você tem curiosidade e vontade de mudar, mas ainda vive mais nas ideias do que na execução. <strong>Isso não é fraqueza — é o ponto de partida de todo grande construtor.</strong> A diferença entre você e quem chegou lá é simples: eles começaram antes de estar prontos.",
+   bars:[{l:"Mentalidade",v:35},{l:"Execução",v:20},{l:"Liderança",v:25},{l:"Int. Financeira",v:30},{l:"Visão",v:40}],
+   traits:[{i:"🌱",n:"Potencial Latente",v:"A semente está plantada. Regue todos os dias."},{i:"📖",n:"Fome de Aprender",v:"10 páginas por dia sobre negócios muda tudo em 1 ano."},{i:"⏰",n:"Ação Imediata",v:"Comece hoje. A hora certa nunca chega esperando."},{i:"🔗",n:"Ambiente",v:"Você se torna a média dos 5 ao redor. Mude o círculo."}],
+   medals:[{i:"🌱",n:"Primeiro Passo",on:true},{i:"🔍",n:"Autoconhecimento",on:true},{i:"⚡",n:"Executor",on:false},{i:"👑",n:"Líder",on:false},{i:"⚜️",n:"Empire Builder",on:false}],
+   quote:{t:"Todo império começa com uma <span>decisão que ninguém viu.</span>"}},
+  {min:26,max:50,badge:"⚡",level:"Executor",tagline:"Você age enquanto outros apenas observam.",rare:"Você supera 65% dos participantes.",rarity:35,
+   desc:"Você já saiu da fase dos sonhos e começou a construir. Tem disciplina acima da média e entende que resultados vêm de ação consistente. <strong>Mas você ainda oscila entre momentos de alta performance e períodos de acomodação.</strong> O próximo nível exige consistência inabalável.",
+   bars:[{l:"Mentalidade",v:55},{l:"Execução",v:65},{l:"Liderança",v:45},{l:"Int. Financeira",v:50},{l:"Visão",v:55}],
+   traits:[{i:"⚡",n:"Executor Real",v:"Você age. Isso já te coloca à frente da maioria."},{i:"📅",n:"Consistência",v:"Monte hábitos inegociáveis. Rotina é liberdade."},{i:"💰",n:"Capital",v:"Comece a fazer seu dinheiro trabalhar agora."},{i:"🎯",n:"Foco Cirúrgico",v:"Um objetivo por vez. Profundidade supera amplitude."}],
+   medals:[{i:"🌱",n:"Primeiro Passo",on:true},{i:"⚡",n:"Executor",on:true},{i:"📅",n:"Consistência",on:true},{i:"👑",n:"Líder",on:false},{i:"⚜️",n:"Empire Builder",on:false}],
+   quote:{t:"<span>Consistência mediana</span> supera genialidade inconsistente. Sempre."}},
+  {min:51,max:70,badge:"🔭",level:"Visionário",tagline:"Você enxerga onde a maioria não chega.",rare:"Você está no top 20% dos participantes.",rarity:20,
+   desc:"Você pensa em longo prazo, age com intenção e aprende com os erros. Sua visão está acima da média — você enxerga oportunidades onde outros veem apenas obstáculos. <strong>Mas visão sem velocidade de execução é só um sonho bonito.</strong> É hora de acelerar.",
+   bars:[{l:"Mentalidade",v:72},{l:"Execução",v:68},{l:"Liderança",v:65},{l:"Int. Financeira",v:70},{l:"Visão",v:85}],
+   traits:[{i:"🔭",n:"Visão Estratégica",v:"Você enxerga o futuro. Agora construa o caminho."},{i:"🚀",n:"Velocidade",v:"Decida mais rápido. Perfeição inimiga do progresso."},{i:"💎",n:"Produto",v:"Crie algo que funcione sem você presente."},{i:"👥",n:"Rede",v:"Seu próximo salto está em quem você conhece."}],
+   medals:[{i:"🌱",n:"Primeiro Passo",on:true},{i:"⚡",n:"Executor",on:true},{i:"🔭",n:"Visionário",on:true},{i:"👑",n:"Líder",on:false},{i:"⚜️",n:"Empire Builder",on:false}],
+   quote:{t:"<span>Bom o suficiente</span> é o inimigo do extraordinário."}},
+  {min:71,max:88,badge:"⚜️",level:"Empire Builder ⚜️",tagline:"Você pensa em sistemas, legado e escala.",rare:"⚡ Você está no top 10% de todos os participantes.",rarity:10,
+   desc:"Raridade real. Você tem clareza, disciplina e visão de longo prazo. Não é por acaso — é o resultado de escolhas deliberadas feitas todos os dias quando ninguém estava assistindo. <strong>Você está entre os que realmente podem construir algo grande.</strong> O que falta é ousadia para escalar além do que você já imaginou.",
+   bars:[{l:"Mentalidade",v:85},{l:"Execução",v:80},{l:"Liderança",v:78},{l:"Int. Financeira",v:82},{l:"Visão",v:90}],
+   traits:[{i:"⚜️",n:"Arquiteto de Sistemas",v:"Você constrói máquinas que funcionam sem você."},{i:"🌍",n:"Impacto em Escala",v:"Pense como seu trabalho alcança 10x mais pessoas."},{i:"👑",n:"Liderança Real",v:"Construa uma equipe que te multiplique."},{i:"✝️",n:"Propósito Sólido",v:"Fé e visão te sustentam nos momentos impossíveis."}],
+   medals:[{i:"🌱",n:"Primeiro Passo",on:true},{i:"⚡",n:"Executor",on:true},{i:"🔭",n:"Visionário",on:true},{i:"⚜️",n:"Empire Builder",on:true},{i:"👑",n:"Titan",on:false}],
+   quote:{t:"Não estou competindo com ninguém. Estou <span>construindo meu legado.</span>"}},
+  {min:89,max:100,badge:"👑",level:"Titan Founder 👑",tagline:"Menos de 1% pensa como você.",rare:"⚡ ELITE ABSOLUTA. Top 1% de todos os participantes.",rarity:1,
+   desc:"Isso é excepcional. Sua mente opera em escalas que a maioria sequer considera. Você não joga o jogo — <strong>você redefine as regras enquanto os outros ainda estão aprendendo a jogar.</strong> Clareza absoluta, execução implacável, propósito inabalável e visão de décadas. Você não está construindo uma empresa. Está construindo um legado que vai sobreviver a você.",
+   bars:[{l:"Mentalidade",v:95},{l:"Execução",v:92},{l:"Liderança",v:90},{l:"Int. Financeira",v:93},{l:"Visão",v:98}],
+   traits:[{i:"👑",n:"Titan Founder",v:"Você pensa em décadas. Age em dias. Isso é raro demais."},{i:"🌍",n:"Legado Global",v:"Sua visão transcende dinheiro. É impacto real."},{i:"⚡",n:"Execução Implacável",v:"Você cria as condições que outros esperam aparecer."},{i:"✝️",n:"Fé Como Fundamento",v:"Inabalável quando tudo desmorona. Isso move montanhas."}],
+   medals:[{i:"🌱",n:"Primeiro Passo",on:true},{i:"⚡",n:"Executor",on:true},{i:"🔭",n:"Visionário",on:true},{i:"⚜️",n:"Empire Builder",on:true},{i:"👑",n:"Titan Founder",on:true}],
+   quote:{t:"<span>Uma minoria extremamente rara</span> muda o mundo. Você é essa minoria."}}
+];
+
+/* ── STATE ── */
+let cur=0,scores=[],answered=false,streak=0,timerInt=null;
+const MAX=QS.length*4;
+
+const ACHES=[
+  {at:0,i:"🚀",t:"Análise Iniciada",s:"Você aceitou o desafio."},
+  {at:4,i:"🔥",t:"Sequência de 5!",s:"Você está em chamas."},
+  {at:12,i:"⚡",t:"Metade do Caminho",s:"Determinação em ação."},
+  {at:19,i:"👑",t:"Reta Final",s:"Poucos chegam até aqui."},
+];
+
+/* ── TIMER ── */
+const TIMER_SECS=20;
+let timerLeft=TIMER_SECS;
+function startTimer(){
+  clearInterval(timerInt);
+  timerLeft=TIMER_SECS;
+  const fill=document.getElementById('timer-fill');
+  fill.style.transition='none';fill.style.width='100%';
+  setTimeout(()=>{
+    fill.style.transition=`width ${TIMER_SECS}s linear`;
+    fill.style.width='0%';
+  },50);
+  timerInt=setInterval(()=>{
+    timerLeft--;
+    if(timerLeft<=0){
+      clearInterval(timerInt);
+      if(!answered) autoAnswer();
+    }
+  },1000);
+}
+function autoAnswer(){
+  answered=true;
+  scores.push(0);
+  addXP(5);
+  streak=0;
+  renderStreak();
+  toast('⏱','Tempo esgotado!','Avançando automaticamente...');
+  setTimeout(nextQ,1200);
+}
+
+/* ── STREAK ── */
+function renderStreak(){
+  const bar=document.getElementById('streak-bar');
+  bar.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.className='streak-dot'+(i<streak?' '+(streak>=5?'fire':'lit'):'');
+    bar.appendChild(d);
+  }
+}
+
+/* ── NARRATIVE ── */
+function revealNarrative(cb){
+  const lines=document.querySelectorAll('.nline');
+  let i=0;
+  function next(){
+    if(i<lines.length){lines[i].classList.add('show');i++;setTimeout(next,420);}
+    else setTimeout(cb,500);
+  }
+  next();
+}
+
+/* ── START ── */
+document.getElementById('btn-start').addEventListener('click',function(){
+  iAudio();
+  this.disabled=true;
+  this.innerHTML='<span>Iniciando...</span>';
+  // Reveal narrative then start
+  const lines=document.querySelectorAll('.nline');
+  const allShown=Array.from(lines).every(l=>l.classList.contains('show'));
+  if(allShown){
+    beginQuiz();
+  } else {
+    revealNarrative(beginQuiz);
+  }
+});
+
+function beginQuiz(){
+  show('sq');
+  document.getElementById('xpw').classList.add('on');
+  renderQ();
+  ACHES.forEach(a=>{if(a.at===0)toast(a.i,a.t,a.s)});
+}
+
+/* ── RENDER Q ── */
+function renderQ(){
+  answered=false;
+  const q=QS[cur];
+  const pct=Math.round((cur/QS.length)*100);
+
+  document.getElementById('pcl').textContent=q.cat;
+  document.getElementById('pnl').textContent=`${cur+1} / ${QS.length}`;
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('qbadge').innerHTML=`${q.icon} ${q.cat}`;
+  document.getElementById('qtext').textContent=q.q;
+  document.getElementById('factbox').classList.remove('show');
+
+  // Achievement check
+  ACHES.forEach(a=>{if(a.at===cur&&cur>0){toast(a.i,a.t,a.s);sMilestone()}});
+
+  renderStreak();
+
+  const opts=document.getElementById('qopts');
+  opts.innerHTML='';
+  const L=['A','B','C','D'];
+  q.opts.forEach((o,i)=>{
+    const btn=document.createElement('button');
+    btn.className='opt';
+    btn.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .28s ${i*.065}s ease,transform .28s ${i*.065}s ease,border-color .2s,background .2s`;
+    btn.innerHTML=`<span class="ol">${L[i]}</span><span class="ot">${o.t}</span>`;
+    btn.addEventListener('click',()=>pickOpt(btn,o,i));
+    opts.appendChild(btn);
+    requestAnimationFrame(()=>setTimeout(()=>{btn.style.opacity='1';btn.style.transform='translateY(0)'},i*55));
+  });
+
+  startTimer();
+}
+
+function pickOpt(btn,opt,idx){
+  if(answered)return;
+  answered=true;
+  clearInterval(timerInt);
+  iAudio();sClick();
+
+  document.querySelectorAll('.opt').forEach(b=>b.style.pointerEvents='none');
+  btn.classList.add('picked');
+
+  scores.push(opt.v);
+  addXP(opt.v*12+15);
+
+  // Streak
+  if(opt.v>=3){streak=Math.min(streak+1,5);if(streak>=5)sGood()}
+  else{streak=0;if(opt.v===0)sBad()}
+  renderStreak();
+
+  // Show fact
+  const fb=document.getElementById('factbox');
+  fb.innerHTML=QS[cur].fact;
+  setTimeout(()=>fb.classList.add('show'),300);
+
+  setTimeout(nextQ,1800);
+}
+
+function nextQ(){
+  cur++;
+  if(cur<QS.length){
+    const card=document.getElementById('qcard');
+    card.style.cssText='opacity:0;transform:translateX(16px);transition:all .2s';
+    const fb=document.getElementById('factbox');
+    fb.style.cssText='opacity:0;transition:opacity .2s';
+    setTimeout(()=>{
+      renderQ();
+      card.style.cssText='opacity:1;transform:translateX(0);transition:all .2s';
+      fb.style.cssText='';
+    },220);
+  } else showAnalyze();
+}
+
+/* ── ANALYZE ── */
+function showAnalyze(){
+  show('sa');
+  const steps=document.querySelectorAll('.as');
+  const pctEl=document.getElementById('an-pct');
+  let p=0;const t=setInterval(()=>{p+=1;if(p>100)p=100;pctEl.textContent=p+'%';if(p>=100)clearInterval(t)},28);
+  steps.forEach((s,i)=>{
+    setTimeout(()=>{
+      steps.forEach(x=>x.classList.remove('act'));
+      s.classList.add('act');
+      if(i>0)steps[i-1].classList.remove('act');steps[i-1]&&steps[i-1].classList.add('done');
+    },i*600);
+  });
+  setTimeout(()=>{steps[steps.length-1].classList.add('done');setTimeout(showResult,400)},steps.length*600+400);
+}
+
+/* ── RESULT ── */
+function showResult(){
+  sWin();show('sr');
+  const total=scores.reduce((a,b)=>a+b,0);
+  const pct=Math.round((total/MAX)*100);
+  const R=RESULTS.find(r=>pct>=r.min&&pct<=r.max)||RESULTS[0];
+
+  document.getElementById('rbadge').textContent=R.badge;
+  document.getElementById('rrare').textContent=R.rare;
+  document.getElementById('rlevel').innerHTML=R.level;
+  document.getElementById('rtagline').textContent=R.tagline;
+  document.getElementById('rrity').textContent=`⚡ Seu perfil é mais raro que o de ${100-R.rarity}% dos participantes`;
+  document.getElementById('rdesc').innerHTML=R.desc;
+  document.getElementById('rquote').innerHTML=`<p>"${R.quote.t}"</p>`;
+
+  // Score ring
+  setTimeout(()=>{
+    const arc=document.getElementById('sarc');
+    arc.style.strokeDashoffset=283-(283*(pct/100));
+    let n=0;const el=document.getElementById('snum');
+    const t=setInterval(()=>{n+=2;if(n>pct)n=pct;el.textContent=n+'%';if(n>=pct)clearInterval(t)},18);
+  },300);
+
+  // Bars
+  document.getElementById('rbars').innerHTML=R.bars.map(b=>`
+    <div class="rb">
+      <div class="rb-top"><span class="rb-l">${b.l}</span><span class="rb-n">${b.v}%</span></div>
+      <div class="rb-track"><div class="rb-fill" data-v="${b.v}"></div></div>
+    </div>`).join('');
+  setTimeout(()=>document.querySelectorAll('.rb-fill').forEach(e=>{e.style.width=e.dataset.v+'%'}),500);
+
+  // Traits
+  document.getElementById('rtraits').innerHTML=R.traits.map(t=>`
+    <div class="rt"><div class="rt-i">${t.i}</div><div class="rt-n">${t.n}</div><div class="rt-v">${t.v}</div></div>`).join('');
+
+  // Medals
+  document.getElementById('medals').innerHTML=R.medals.map(m=>`
+    <div class="med${m.on?' on':''}"><span>${m.i}</span>${m.n}</div>`).join('');
+
+  // Share preview
+  const shareText=buildShareText(R,pct);
+  document.getElementById('share-preview').textContent=shareText;
+}
+
+function buildShareText(R,pct){
+  return `🧠 EMPIRE MINDSET ⚜️
+
+Meu resultado: ${R.level}
+Empire Score: ${pct}%
+${R.rarity===1?'⚡ Top 1% absoluto!':R.rarity<=10?'⚡ Top 10%!':'Acima de '+(100-R.rarity)+'% dos participantes'}
+
+"${R.quote.t.replace(/<[^>]*>/g,'')}"
+
+Faça o seu ↓
+linktr.ee/caminhodoempresario
+
+@_fabricio_ce
+#EmpireBuilders #EmpireMindset #CaminhoDoEmpresário`;
+}
+
+function shareResult(){
+  iAudio();
+  const pct=parseInt(document.getElementById('snum').textContent)||0;
+  const R=RESULTS.find(r=>pct>=r.min&&pct<=r.max)||RESULTS[0];
+  const text=buildShareText(R,pct);
+  if(navigator.share){navigator.share({title:'EMPIRE MINDSET ⚜️',text})}
+  else{
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn=document.querySelector('.btn-g');
+      const orig=btn.textContent;
+      btn.textContent='✓ Copiado! Cole no Instagram ou WhatsApp';
+      btn.style.background='linear-gradient(135deg,#4CAF50,#66BB6A)';
+      setTimeout(()=>{btn.textContent=orig;btn.style.background=''},3200);
+    });
+  }
+}
+
+function challengeFriend(){
+  iAudio();
+  const text=`⚔️ DESAFIO Empire Mindset!\n\nVocê tem mentalidade de construtor de impérios?\n\nFiz o teste e o resultado me surpreendeu.\n\nAgora é a sua vez 👇\nlinktr.ee/caminhodoempresario\n\n@_fabricio_ce #EmpireMindset`;
+  if(navigator.share){navigator.share({title:'Desafio Empire Mindset',text})}
+  else navigator.clipboard.writeText(text).then(()=>toast('⚔️','Desafio copiado!','Cole no WhatsApp e desafie seus amigos.'));
+}
+
+function restart(){
+  cur=0;scores=[];answered=false;streak=0;xp=0;
+  clearInterval(timerInt);
+  document.getElementById('xp-n').textContent='0';
+  document.getElementById('xp-v').textContent='0 XP';
+  document.getElementById('xp-f').style.width='0%';
+  document.getElementById('sarc').style.strokeDashoffset='283';
+  document.getElementById('btn-start').disabled=false;
+  document.getElementById('btn-start').innerHTML='<span>⚜️ Iniciar Análise</span>';
+  document.getElementById('xpw').classList.remove('on');
+  document.querySelectorAll('.nline').forEach(l=>l.classList.remove('show'));
+  show('si');
+}
+
+// Reveal narrative on load slowly
+window.addEventListener('load',()=>{
+  const lines=document.querySelectorAll('.nline');
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('show'),700+i*420));
+});
+</script>
+</body>
+</html>

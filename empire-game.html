@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EMPIRE GAME ⚜️ | CE · Caminho do Empresário</title>
+<meta name="description" content="Você tem o que precisa para construir um império? Tome decisões reais e descubra seu perfil empresarial.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030303;
+  --bg2:#080808;
+  --surface:#0D0D0D;
+  --surface2:#121212;
+  --border:#1C1C1C;
+  --border2:#252525;
+  --gold:#C9A84C;
+  --gold2:#E8C96A;
+  --gold3:#F5DFA0;
+  --gold-dim:rgba(201,168,76,0.08);
+  --gold-mid:rgba(201,168,76,0.18);
+  --gold-border:rgba(201,168,76,0.28);
+  --white:#F5F2EC;
+  --white2:#DDD8D0;
+  --text:#9A9088;
+  --muted:#484848;
+  --red:rgba(220,60,60,0.85);
+  --green:rgba(60,180,100,0.85);
+  --blue:rgba(60,120,220,0.85);
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Inter',sans-serif;font-weight:300;
+  min-height:100vh;overflow-x:hidden;cursor:none;
+}
+
+/* CURSOR */
+.cur{position:fixed;z-index:9999;pointer-events:none;top:0;left:0}
+.cur-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%)}
+.cur-ring{width:34px;height:34px;border:1px solid rgba(201,168,76,.4);border-radius:50%;transform:translate(-50%,-50%);transition:left .1s,top .1s,width .3s,height .3s}
+.cur-ring.big{width:56px;height:56px;border-color:rgba(201,168,76,.2)}
+
+/* CANVAS */
+#bgc{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* BRAND */
+.brand{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:20px 40px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(3,3,3,.97),transparent);
+}
+.b-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.b-logo span{color:var(--white2)}
+.b-stats{display:flex;gap:20px}
+.b-stat{text-align:center}
+.b-stat-n{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--white);line-height:1}
+.b-stat-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+/* SCREENS */
+.screen{position:relative;z-index:1;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:90px 24px 60px}
+.screen.on{display:flex}
+
+/* ══ INTRO ══ */
+#si{text-align:center}
+.i-emblem{
+  width:96px;height:96px;border-radius:50%;
+  border:1px solid var(--gold-border);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 28px;position:relative;
+  animation:espin 25s linear infinite;
+}
+.i-emblem::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.1)}
+.i-emblem::after{content:'';position:absolute;inset:-11px;border-radius:50%;border:1px solid rgba(201,168,76,.05)}
+.i-emblem-icon{font-size:34px;animation:espin 25s linear reverse infinite}
+@keyframes espin{to{transform:rotate(360deg)}}
+.i-eyebrow{font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;opacity:0;animation:up .8s .2s ease forwards}
+.i-title{font-family:'Syne',sans-serif;font-size:clamp(40px,9vw,80px);font-weight:800;color:var(--white);letter-spacing:-2px;line-height:.88;margin-bottom:10px;opacity:0;animation:up .8s .3s ease forwards}
+.i-title .g{color:var(--gold)}
+.i-subtitle{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,2.5vw,19px);color:var(--text);margin-bottom:40px;opacity:0;animation:up .8s .4s ease forwards}
+.i-narrative{max-width:480px;margin:0 auto 40px;opacity:0;animation:up .8s .5s ease forwards}
+.i-nar-line{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,2.5vw,19px);color:var(--white2);line-height:1.65;margin-bottom:4px;opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
+.i-nar-line.show{opacity:1;transform:translateY(0)}
+.i-nar-line.accent{color:var(--gold);font-size:clamp(16px,3vw,22px);font-weight:600}
+
+.i-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:400px;margin:0 auto 32px;opacity:0;animation:up .8s .7s ease forwards}
+.i-stat{flex:1;padding:16px 8px;text-align:center;border-right:1px solid var(--border)}
+.i-stat:last-child{border-right:none}
+.i-stat-n{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold);line-height:1}
+.i-stat-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+.btn-play{
+  display:inline-flex;align-items:center;gap:12px;
+  padding:18px 44px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;border-radius:3px;
+  font-family:'Syne',sans-serif;font-size:12px;font-weight:800;
+  letter-spacing:4px;text-transform:uppercase;color:#030303;
+  cursor:pointer;transition:all .3s;
+  opacity:0;animation:up .8s .8s ease forwards;
+  position:relative;overflow:hidden;
+}
+.btn-play::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--gold2),var(--gold3));opacity:0;transition:opacity .3s}
+.btn-play:hover::before{opacity:1}
+.btn-play:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(201,168,76,.28)}
+.btn-play span{position:relative;z-index:1}
+
+/* ══ GAME ══ */
+#sg{padding:100px 24px 80px;align-items:stretch}
+.game-wrap{width:100%;max-width:700px;margin:0 auto}
+
+/* STATS BAR */
+.stats-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin-bottom:28px;
+}
+.stat-card{
+  padding:14px 12px;background:var(--surface);
+  border:1px solid var(--border);border-radius:4px;text-align:center;
+  transition:border-color .3s;
+}
+.stat-card.glow{border-color:var(--gold-border);animation:sglow .5s ease}
+@keyframes sglow{0%,100%{box-shadow:none}50%{box-shadow:0 0 20px rgba(201,168,76,.15)}}
+.sc-icon{font-size:16px;margin-bottom:4px}
+.sc-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--white);line-height:1}
+.sc-val.positive{color:#6BCB77;animation:bump .3s ease}
+.sc-val.negative{color:#FF6B6B;animation:bump .3s ease}
+@keyframes bump{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.sc-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+/* PROGRESS */
+.prog-wrap{margin-bottom:24px}
+.prog-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-chapter{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
+.prog-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--white)}
+.prog-track{height:2px;background:var(--border);overflow:hidden;border-radius:2px;position:relative}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .5s cubic-bezier(.4,0,.2,1)}
+.prog-track::after{content:'';position:absolute;top:0;left:-60%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);animation:shim 2s ease infinite}
+@keyframes shim{to{left:140%}}
+
+/* SCENARIO CARD */
+.scenario{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;overflow:hidden;margin-bottom:16px;
+  position:relative;
+}
+.scenario::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold-border),transparent)}
+.scenario-header{
+  padding:20px 24px 16px;
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:12px;
+}
+.scenario-icon{font-size:24px}
+.scenario-meta{}
+.scenario-cat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:3px}
+.scenario-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--white);line-height:1.2}
+.scenario-body{padding:20px 24px}
+.scenario-situation{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(15px,2.5vw,18px);font-style:italic;
+  color:var(--white2);line-height:1.65;margin-bottom:16px;
+  padding-left:14px;border-left:2px solid var(--gold-border);
+}
+.scenario-context{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:6px}
+.scenario-context strong{color:var(--white2);font-weight:500}
+
+/* CONSEQUENCE (from last choice) */
+.consequence{
+  padding:12px 16px;margin-bottom:16px;
+  border-radius:3px;font-size:13px;line-height:1.5;
+  display:none;align-items:center;gap:10px;
+}
+.consequence.show{display:flex}
+.consequence.pos{background:rgba(60,180,100,0.08);border:1px solid rgba(60,180,100,0.2);color:#6BCB77}
+.consequence.neg{background:rgba(220,60,60,0.07);border:1px solid rgba(220,60,60,0.18);color:#FF6B6B}
+.consequence.neu{background:var(--gold-dim);border:1px solid var(--gold-border);color:var(--gold)}
+.consequence-icon{font-size:18px;flex-shrink:0}
+
+/* CHOICES */
+.choices{display:flex;flex-direction:column;gap:8px}
+.choice{
+  padding:16px 18px;
+  background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+  display:flex;align-items:flex-start;gap:14px;
+  cursor:pointer;transition:all .22s;
+  text-align:left;width:100%;position:relative;overflow:hidden;
+}
+.choice::before{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--gold-dim),transparent);transition:width .3s}
+.choice:hover::before{width:100%}
+.choice:hover{border-color:var(--gold-border);transform:translateX(4px)}
+.choice:hover .ch-letter{background:var(--gold);color:#030303}
+.choice.chosen{border-color:var(--gold);background:var(--gold-dim)}
+.choice.chosen .ch-letter{background:var(--gold);color:#030303}
+.ch-letter{
+  width:28px;height:28px;border-radius:2px;
+  background:var(--border2);
+  font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+  color:var(--muted);display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:all .22s;position:relative;z-index:1;
+}
+.ch-wrap{position:relative;z-index:1}
+.ch-text{font-size:14px;color:var(--text);transition:color .22s;line-height:1.5}
+.choice:hover .ch-text,.choice.chosen .ch-text{color:var(--white)}
+.ch-impact{margin-top:4px;font-size:11px;color:var(--muted);display:flex;gap:10px}
+.ch-imp-item{display:flex;align-items:center;gap:3px}
+.ch-imp-item.pos{color:rgba(60,180,100,.7)}
+.ch-imp-item.neg{color:rgba(220,60,60,.6)}
+.ch-imp-item.neu{color:rgba(201,168,76,.6)}
+
+/* TOAST */
+.toast{
+  position:fixed;top:76px;right:20px;z-index:300;
+  background:var(--surface);border:1px solid var(--gold-border);
+  border-radius:4px;padding:12px 16px;
+  display:flex;align-items:center;gap:10px;
+  transform:translateX(120%);transition:transform .4s cubic-bezier(.4,0,.2,1);
+  max-width:260px;box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+.toast.show{transform:translateX(0)}
+.t-icon{font-size:18px}
+.t-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold)}
+.t-sub{font-size:11px;color:var(--text);margin-top:1px}
+
+/* ══ RESULT ══ */
+#sr{text-align:center;padding:90px 24px 60px}
+.r-wrap{width:100%;max-width:620px}
+.r-glow{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.06) 0%,transparent 65%);pointer-events:none;animation:gpulse 4s ease-in-out infinite}
+@keyframes gpulse{0%,100%{opacity:.4;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.15)}}
+
+.r-badge{width:100px;height:100px;border-radius:50%;border:1px solid var(--gold-border);background:var(--gold-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:42px;position:relative}
+.r-badge::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.12)}
+
+.r-rare{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.r-level{font-family:'Syne',sans-serif;font-size:clamp(26px,5vw,44px);font-weight:800;color:var(--white);line-height:1;margin-bottom:6px}
+.r-level .g{color:var(--gold)}
+.r-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,2.5vw,18px);color:var(--text);margin-bottom:28px}
+
+/* EMPIRE SCORE */
+.r-score-ring{width:130px;height:130px;border-radius:50%;margin:0 auto 24px;position:relative;display:flex;align-items:center;justify-content:center}
+.r-score-svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.r-track{fill:none;stroke:var(--border2);stroke-width:3}
+.r-arc{fill:none;stroke:url(#gg);stroke-width:3;stroke-linecap:round;stroke-dasharray:340;stroke-dashoffset:340;transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1)}
+.r-score-inside{text-align:center}
+.r-score-num{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--gold);line-height:1}
+.r-score-lbl{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:2px}
+
+.r-rarity-banner{padding:12px 18px;background:var(--gold-dim);border:1px solid var(--gold-border);border-radius:3px;margin-bottom:24px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--gold)}
+
+.r-desc{font-size:14px;color:var(--text);line-height:1.9;text-align:left;padding:22px 20px;background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:20px}
+.r-desc strong{color:var(--white);font-weight:500}
+
+/* EMPIRE STATS */
+.r-empire-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:20px}
+.res-stat{padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:left}
+.res-stat-icon{font-size:20px;margin-bottom:8px}
+.res-stat-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white);margin-bottom:4px}
+.res-stat-val{font-size:11px;color:var(--text);line-height:1.5}
+
+/* BARS */
+.r-bars{margin-bottom:20px;text-align:left}
+.r-bars-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.r-bar{margin-bottom:12px}
+.r-bar-top{display:flex;justify-content:space-between;margin-bottom:5px}
+.r-bar-l{font-size:12px;color:var(--white2)}
+.r-bar-n{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--gold)}
+.r-bar-track{height:2px;background:var(--border2);border-radius:2px;overflow:hidden}
+.r-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));width:0;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+
+/* CHOICES LOG */
+.r-log{margin-bottom:20px;text-align:left}
+.r-log-title{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.r-log-item{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border2)}
+.r-log-item:last-child{border-bottom:none}
+.r-log-num{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--muted);min-width:20px;padding-top:1px}
+.r-log-text{font-size:12px;color:var(--text);line-height:1.5}
+.r-log-text strong{color:var(--white2);font-weight:500}
+
+.r-quote{padding:22px;background:var(--gold-dim);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;margin-bottom:24px;text-align:left}
+.r-quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,2.5vw,20px);color:var(--white);line-height:1.4}
+.r-quote p span{color:var(--gold)}
+
+.r-btns{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.btn-g{width:100%;padding:16px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#030303;cursor:pointer;transition:all .3s}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(201,168,76,.25)}
+.btn-o{width:100%;padding:14px;background:transparent;border:1px solid var(--border2);border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .3s}
+.btn-o:hover{border-color:var(--gold-border);color:var(--gold)}
+.btn-com{width:100%;padding:14px;background:transparent;border:1px solid var(--gold-border);border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold);cursor:pointer;transition:all .3s;text-decoration:none;display:block}
+.btn-com:hover{background:var(--gold-dim)}
+
+.r-footer{padding-top:16px;border-top:1px solid var(--border);font-size:10px;color:var(--muted);letter-spacing:1px;text-align:center}
+.r-footer a{color:var(--gold);text-decoration:none}
+
+/* ANIMS */
+@keyframes up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.fade{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+.fade.in{opacity:1;transform:translateY(0)}
+
+@media(max-width:560px){
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+  .scenario-body,.scenario-header{padding:16px}
+  .brand{padding:16px 20px}
+  .r-empire-stats{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<canvas id="bgc"></canvas>
+<div class="cur" id="cD"><div class="cur-dot"></div></div>
+<div class="cur" id="cR"><div class="cur-ring"></div></div>
+
+<div class="toast" id="toast">
+  <span class="t-icon" id="ti">🏆</span>
+  <div><div class="t-title" id="tt"></div><div class="t-sub" id="ts"></div></div>
+</div>
+
+<div class="brand">
+  <div class="b-logo">CE ⚜️ <span>Empire Game</span></div>
+  <div class="b-stats">
+    <div class="b-stat"><div class="b-stat-n" id="hd-capital">R$0</div><div class="b-stat-l">Capital</div></div>
+    <div class="b-stat"><div class="b-stat-n" id="hd-rep">0</div><div class="b-stat-l">Reputação</div></div>
+  </div>
+</div>
+
+<!-- ══ INTRO ══ -->
+<div class="screen on" id="si">
+  <div class="i-emblem"><div class="i-emblem-icon">⚜️</div></div>
+  <div class="i-eyebrow">CE · Caminho do Empresário · 2026</div>
+  <h1 class="i-title">EMPIRE<br><span class="g">GAME</span> ⚜️</h1>
+  <p class="i-subtitle">Cada decisão tem um preço. Qual será o seu?</p>
+  <div class="i-narrative" id="inar">
+    <div class="i-nar-line">Você começa do zero.</div>
+    <div class="i-nar-line">Sem herança. Sem atalhos.</div>
+    <div class="i-nar-line">Apenas sua mente, sua fé e suas decisões.</div>
+    <div class="i-nar-line accent">Cada escolha constrói ou destrói seu império.</div>
+    <div class="i-nar-line" style="margin-top:10px;color:var(--white);font-size:clamp(16px,3vw,22px);font-weight:600">Você está pronto para construir?</div>
+  </div>
+  <div class="i-stats">
+    <div class="i-stat"><div class="i-stat-n">20</div><div class="i-stat-l">Cenários</div></div>
+    <div class="i-stat"><div class="i-stat-n">4</div><div class="i-stat-l">Recursos</div></div>
+    <div class="i-stat"><div class="i-stat-n">8</div><div class="i-stat-l">Perfis</div></div>
+  </div>
+  <button class="btn-play" onclick="startGame()"><span>⚜️ Começar a Construir</span></button>
+</div>
+
+<!-- ══ GAME ══ -->
+<div class="screen" id="sg">
+  <div class="game-wrap">
+    <div class="stats-row">
+      <div class="stat-card" id="sc-capital">
+        <div class="sc-icon">💰</div>
+        <div class="sc-val" id="sv-capital">R$1k</div>
+        <div class="sc-lbl">Capital</div>
+      </div>
+      <div class="stat-card" id="sc-rep">
+        <div class="sc-icon">⭐</div>
+        <div class="sc-val" id="sv-rep">10</div>
+        <div class="sc-lbl">Reputação</div>
+      </div>
+      <div class="stat-card" id="sc-rede">
+        <div class="sc-icon">🤝</div>
+        <div class="sc-val" id="sv-rede">5</div>
+        <div class="sc-lbl">Rede</div>
+      </div>
+      <div class="stat-card" id="sc-conhecimento">
+        <div class="sc-icon">🧠</div>
+        <div class="sc-val" id="sv-conhecimento">10</div>
+        <div class="sc-lbl">Conhecimento</div>
+      </div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-top">
+        <span class="prog-chapter" id="prog-chap">Capítulo 1</span>
+        <span class="prog-num" id="prog-num">1 / 20</span>
+      </div>
+      <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    </div>
+    <div class="consequence" id="consequence">
+      <span class="consequence-icon" id="cons-icon"></span>
+      <span id="cons-text"></span>
+    </div>
+    <div class="scenario" id="scenario-card">
+      <div class="scenario-header">
+        <span class="scenario-icon" id="sc-icon-el"></span>
+        <div class="scenario-meta">
+          <div class="scenario-cat" id="sc-cat-el"></div>
+          <div class="scenario-title" id="sc-title-el"></div>
+        </div>
+      </div>
+      <div class="scenario-body">
+        <div class="scenario-situation" id="sc-sit-el"></div>
+        <div class="scenario-context" id="sc-ctx-el"></div>
+      </div>
+    </div>
+    <div class="choices" id="choices-el"></div>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div class="screen" id="sr">
+  <div class="r-glow"></div>
+  <div class="r-wrap">
+    <div class="r-badge" id="r-badge">⚜️</div>
+    <div class="r-rare" id="r-rare"></div>
+    <div class="r-level" id="r-level"></div>
+    <div class="r-tagline" id="r-tagline"></div>
+    <div class="r-score-ring">
+      <svg class="r-score-svg" viewBox="0 0 110 110">
+        <defs>
+          <linearGradient id="gg" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#C9A84C"/>
+            <stop offset="100%" stop-color="#E8C96A"/>
+          </linearGradient>
+        </defs>
+        <circle class="r-track" cx="55" cy="55" r="50"/>
+        <circle class="r-arc" id="r-arc" cx="55" cy="55" r="50"/>
+      </svg>
+      <div class="r-score-inside">
+        <div class="r-score-num" id="r-score-num">0</div>
+        <div class="r-score-lbl">Empire Score</div>
+      </div>
+    </div>
+    <div class="r-rarity-banner" id="r-rarity"></div>
+    <div class="r-desc" id="r-desc"></div>
+    <div class="r-bars">
+      <div class="r-bars-title">Recursos Finais</div>
+      <div id="r-bars-inner"></div>
+    </div>
+    <div class="r-empire-stats" id="r-traits"></div>
+    <div class="r-log">
+      <div class="r-log-title">Suas decisões mais importantes</div>
+      <div id="r-log-inner"></div>
+    </div>
+    <div class="r-quote" id="r-quote"></div>
+    <div class="r-btns">
+      <button class="btn-g" onclick="shareResult()">📲 Compartilhar resultado</button>
+      <a href="https://linktr.ee/caminhodoempresario" target="_blank" class="btn-com">⚜️ Entrar para a Comunidade CE</a>
+      <button class="btn-o" onclick="restartGame()">↺ Jogar novamente</button>
+    </div>
+    <div class="r-footer">por <a href="https://www.instagram.com/_fabricio_ce" target="_blank">Fabrício CE</a> · <a href="https://linktr.ee/caminhodoempresario" target="_blank">Empire Builders</a> · 2026</div>
+  </div>
+</div>
+
+<script>
+/* CURSOR */
+const cD=document.getElementById('cD'),cR=document.getElementById('cR');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cD.style.left=mx+'px';cD.style.top=my+'px'});
+(function animR(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;cR.style.left=rx+'px';cR.style.top=ry+'px';requestAnimationFrame(animR)})();
+document.querySelectorAll('button,a,.choice').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cR.querySelector('.cur-ring').classList.add('big'));
+  el.addEventListener('mouseleave',()=>cR.querySelector('.cur-ring').classList.remove('big'));
+});
+
+/* CANVAS */
+(function(){
+  const c=document.getElementById('bgc'),ctx=c.getContext('2d');
+  let W,H,pts=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  for(let i=0;i<50;i++)pts.push({x:Math.random()*1e4%100+'%',X:Math.random()*window.innerWidth,Y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.12,vy:-(Math.random()*.25+.04),o:Math.random()*.35+.05,r:Math.random()*1.4+.3});
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pts.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.X,p.Y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(201,168,76,${p.o})`;ctx.fill();
+      p.X+=p.vx;p.Y+=p.vy;
+      if(p.Y<-5){p.Y=H+5;p.X=Math.random()*W}
+      if(p.X<0)p.X=W;if(p.X>W)p.X=0;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* AUDIO */
+const AC=window.AudioContext||window.webkitAudioContext;
+let ac;
+function initAudio(){if(!ac&&AC)ac=new AC()}
+function tone(f,d,t='sine',v=.07){
+  if(!ac)return;
+  try{const o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);
+  o.frequency.value=f;o.type=t;g.gain.setValueAtTime(0,ac.currentTime);
+  g.gain.linearRampToValueAtTime(v,ac.currentTime+.01);
+  g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+d);
+  o.start();o.stop(ac.currentTime+d);}catch(e){}
+}
+function playClick(){tone(380,.12,'sine',.06);setTimeout(()=>tone(480,.08,'sine',.04),70)}
+function playGood(){[523,659,784].forEach((f,i)=>setTimeout(()=>tone(f,.2,'sine',.06),i*80))}
+function playBad(){tone(220,.3,'sawtooth',.04)}
+function playWin(){[523,659,784,1047,1319].forEach((f,i)=>setTimeout(()=>tone(f,.25,'sine',.06),i*90))}
+
+/* GAME STATE */
+let state={capital:1000,rep:10,rede:5,conhecimento:10};
+let cur=0,choices_log=[],answered=false;
+
+/* SCENARIOS */
+const SCENARIOS=[
+  {
+    chap:"Capítulo 1 · Começo",icon:"🌅",cat:"Primeiro Passo",
+    title:"O ponto zero",
+    situation:"Você tem R$1.000 e uma ideia. Todos ao redor dizem que não vai dar certo.",
+    context:"Você encontrou uma oportunidade de começar um pequeno negócio digital. O investimento inicial é baixo, mas o risco é real. <strong>O que você faz?</strong>",
+    choices:[
+      {t:"Invisto tudo e começo agora. Risco faz parte.",impact:{capital:-500,rep:+5,rede:+3,conhecimento:+8},tag:"Executor",consequence:{type:"pos",icon:"🚀",text:"Você agiu enquanto outros hesitavam. +Conhecimento, +Reputação."}},
+      {t:"Estudo mais 3 meses antes de investir.",impact:{capital:0,rep:0,rede:0,conhecimento:+12},tag:"Analítico",consequence:{type:"neu",icon:"📚",text:"Você aprendeu muito, mas o mercado não esperou. +Conhecimento."}},
+      {t:"Começo pequeno, sem investir nada ainda.",impact:{capital:+200,rep:-3,rede:0,conhecimento:+4},tag:"Conservador",consequence:{type:"neg",icon:"🐢",text:"Segurança demais. Você cresceu pouco. +Capital pequeno."}},
+      {t:"Desisto. O risco é muito alto.",impact:{capital:0,rep:-5,rede:-2,conhecimento:0},tag:"Acomodado",consequence:{type:"neg",icon:"❌",text:"Você ficou na zona de conforto. Nada mudou."}}
+    ]
+  },
+  {
+    chap:"Capítulo 1 · Começo",icon:"👥",cat:"Pessoas & Rede",
+    title:"O mentor certo",
+    situation:"Um empresário experiente te oferece mentoria gratuita. Mas vai consumir 10h por semana.",
+    context:"Esse mentor já construiu 3 empresas do zero. A mentoria é gratuita mas exige compromisso total. <strong>Você aceita?</strong>",
+    choices:[
+      {t:"Aceito imediatamente. Tempo é meu melhor investimento.",impact:{capital:0,rep:+8,rede:+12,conhecimento:+15},tag:"Estratégico",consequence:{type:"pos",icon:"🤝",text:"Decisão brilhante. Rede e conhecimento explodiram."}},
+      {t:"Aceito mas negocio para 5h por semana.",impact:{capital:0,rep:+4,rede:+6,conhecimento:+8},tag:"Equilibrado",consequence:{type:"neu",icon:"⚖️",text:"Você aproveitou parcialmente. Crescimento moderado."}},
+      {t:"Recuso. Não tenho tempo agora.",impact:{capital:+300,rep:-4,rede:-3,conhecimento:0},tag:"Ocupado",consequence:{type:"neg",icon:"⏰",text:"Você perdeu uma das melhores oportunidades."}},
+      {t:"Aceito mas faltarei às sessões quando precisar.",impact:{capital:0,rep:-8,rede:-5,conhecimento:+3},tag:"Inconsistente",consequence:{type:"neg",icon:"💔",text:"Você quebrou um compromisso. Reputação caiu muito."}}
+    ]
+  },
+  {
+    chap:"Capítulo 2 · Construção",icon:"💰",cat:"Inteligência Financeira",
+    title:"A primeira receita",
+    situation:"Você faturou R$3.000 pela primeira vez. O dinheiro está na conta.",
+    context:"Primeiro dinheiro real do seu negócio. Todos ao redor querem te ver gastando. <strong>O que você faz com ele?</strong>",
+    choices:[
+      {t:"50% reinvisto no negócio, 30% reserva, 20% para mim.",impact:{capital:+1800,rep:+5,rede:+2,conhecimento:+5},tag:"Inteligente",consequence:{type:"pos",icon:"📈",text:"Equilíbrio perfeito. Capital cresceu de forma sustentável."}},
+      {t:"Reinvisto 100%. Ainda não mereço gastar.",impact:{capital:+2500,rep:+3,rede:0,conhecimento:+3},tag:"Focado",consequence:{type:"pos",icon:"🔥",text:"Disciplina máxima. Capital disparou."}},
+      {t:"Compro algo que sempre quis. Mereci.",impact:{capital:-500,rep:+2,rede:+3,conhecimento:0},tag:"Impulsivo",consequence:{type:"neg",icon:"💸",text:"O prazer custou crescimento. Capital diminuiu."}},
+      {t:"Guardo tudo. Medo de perder.",impact:{capital:+3000,rep:-2,rede:-1,conhecimento:0},tag:"Medroso",consequence:{type:"neu",icon:"🔒",text:"Seguro mas estagnado. Dinheiro parado não cresce."}}
+    ]
+  },
+  {
+    chap:"Capítulo 2 · Construção",icon:"⚔️",cat:"Coragem",
+    title:"A proposta inesperada",
+    situation:"Uma empresa te oferece R$8.000 para criar um projeto. Prazo: 2 semanas.",
+    context:"É mais do que você já faturou. Mas o prazo é curto e você nunca fez algo nessa escala. <strong>O que você decide?</strong>",
+    choices:[
+      {t:"Aceito e entrego com qualidade. Vou me virar.",impact:{capital:+7000,rep:+15,rede:+8,conhecimento:+12},tag:"Corajoso",consequence:{type:"pos",icon:"👑",text:"Você se superou. Capital e reputação explodiram."}},
+      {t:"Aceito mas negocio o prazo para 3 semanas.",impact:{capital:+6000,rep:+10,rede:+5,conhecimento:+8},tag:"Estratégico",consequence:{type:"pos",icon:"🎯",text:"Boa negociação. Entregou bem com mais segurança."}},
+      {t:"Recuso. Não me sinto pronto.",impact:{capital:0,rep:-5,rede:-3,conhecimento:+5},tag:"Inseguro",consequence:{type:"neg",icon:"😔",text:"A oportunidade foi para outro. Aprenda com isso."}},
+      {t:"Aceito, subcontrato alguém e fico com a diferença.",impact:{capital:+4000,rep:+3,rede:+6,conhecimento:+2},tag:"Esperto",consequence:{type:"neu",icon:"🔄",text:"Funcionou. Mas você perdeu o aprendizado real."}}
+    ]
+  },
+  {
+    chap:"Capítulo 2 · Construção",icon:"📱",cat:"Marketing Digital",
+    title:"Construindo presença",
+    situation:"Você precisa crescer online. Tem R$2.000 para investir em marketing.",
+    context:"Sem audiência não há negócio. Você precisa escolher sua estratégia de crescimento digital. <strong>Como vai investir?</strong>",
+    choices:[
+      {t:"Crio conteúdo orgânico todo dia. Consistência é tudo.",impact:{capital:-200,rep:+12,rede:+10,conhecimento:+8},tag:"Criador",consequence:{type:"pos",icon:"📲",text:"Conteúdo consistente constrói autoridade real."}},
+      {t:"Invisto tudo em tráfego pago para escalar rápido.",impact:{capital:-1800,rep:+6,rede:+4,conhecimento:+5},tag:"Agressivo",consequence:{type:"neu",icon:"📊",text:"Cresceu rápido mas o custo foi alto."}},
+      {t:"Metade em conteúdo, metade em ads. Equilíbrio.",impact:{capital:-900,rep:+10,rede:+7,conhecimento:+8},tag:"Equilibrado",consequence:{type:"pos",icon:"⚖️",text:"Estratégia sólida. Crescimento sustentável."}},
+      {t:"Não invisto nada. Espero o boca a boca.",impact:{capital:0,rep:-2,rede:-2,conhecimento:+2},tag:"Passivo",consequence:{type:"neg",icon:"🦗",text:"Nada acontece sem ação. Estagnação total."}}
+    ]
+  },
+  {
+    chap:"Capítulo 3 · Crise",icon:"🔥",cat:"Resiliência",
+    title:"O maior erro até agora",
+    situation:"Você perdeu um cliente grande e R$4.000 foram junto. Todo mundo sabe.",
+    context:"Falha pública. Clientes antigos estão questionando. Sua reputação está em risco. <strong>Como você reage?</strong>",
+    choices:[
+      {t:"Assumo o erro publicamente e apresento a solução.",impact:{capital:-4000,rep:+8,rede:+5,conhecimento:+10},tag:"Líder",consequence:{type:"pos",icon:"💎",text:"Honestidade sob pressão é liderança real. Reputação subiu."}},
+      {t:"Analiso o erro em privado e recomece silenciosamente.",impact:{capital:-4000,rep:0,rede:0,conhecimento:+8},tag:"Resiliente",consequence:{type:"neu",icon:"🔄",text:"Você aprendeu mas não aproveitou para mostrar caráter."}},
+      {t:"Culpo fatores externos. Não foi minha culpa.",impact:{capital:-4000,rep:-12,rede:-8,conhecimento:0},tag:"Fraco",consequence:{type:"neg",icon:"💀",text:"Desculpa destruiu mais do que o erro. Reputação despencou."}},
+      {t:"Desapareço por um tempo até esquecerem.",impact:{capital:-4000,rep:-15,rede:-10,conhecimento:0},tag:"Covarde",consequence:{type:"neg",icon:"🏳️",text:"Fuga é sempre a pior escolha. Mercado tem memória."}}
+    ]
+  },
+  {
+    chap:"Capítulo 3 · Crise",icon:"🧘",cat:"Controle Emocional",
+    title:"A pressão máxima",
+    situation:"Você não dorme há 3 dias. Tem 2 prazos vencendo amanhã e sua equipe falhou.",
+    context:"Momento de verdade. A pressão está no limite. Cada decisão agora vai definir quem você é como líder. <strong>O que você faz?</strong>",
+    choices:[
+      {t:"Respiro fundo, priorizo o mais urgente e executo.",impact:{capital:+1000,rep:+8,rede:+5,conhecimento:+6},tag:"Controlado",consequence:{type:"pos",icon:"🧘",text:"Clareza sob pressão. Isso é o que separa líderes."}},
+      {t:"Chamo a equipe, delegue e supervisiono.",impact:{capital:0,rep:+5,rede:+8,conhecimento:+4},tag:"Líder",consequence:{type:"pos",icon:"👥",text:"Liderança real. Você multiplicou sua capacidade."}},
+      {t:"Trabalho sozinho a noite toda para resolver tudo.",impact:{capital:+500,rep:+2,rede:-2,conhecimento:+3},tag:"Solitário",consequence:{type:"neu",icon:"🦅",text:"Funcionou, mas esgotamento tem custo."}},
+      {t:"Entro em pânico e começo a tomar decisões impulsivas.",impact:{capital:-2000,rep:-10,rede:-5,conhecimento:0},tag:"Instável",consequence:{type:"neg",icon:"💥",text:"Decisões no pânico destroem o que foi construído."}}
+    ]
+  },
+  {
+    chap:"Capítulo 3 · Crise",icon:"💔",cat:"Relacionamentos",
+    title:"Quem fica quando a crise chega",
+    situation:"Seu parceiro de negócios quer sair bem na hora que você mais precisa dele.",
+    context:"A crise revelou quem realmente acredita no projeto. Seu sócio perdeu a fé. <strong>O que você faz?</strong>",
+    choices:[
+      {t:"Negocio os termos de saída de forma justa e sigo sozinho.",impact:{capital:-2000,rep:+5,rede:0,conhecimento:+5},tag:"Maduro",consequence:{type:"pos",icon:"🤝",text:"Saída digna. Sua reputação foi preservada."}},
+      {t:"Tento convencê-lo a ficar com uma nova proposta.",impact:{capital:-1000,rep:+3,rede:+4,conhecimento:+3},tag:"Persistente",consequence:{type:"neu",icon:"🔄",text:"Ele ficou por mais 3 meses. O problema só adiou."}},
+      {t:"Brigo e deixo a relação terminar mal.",impact:{capital:-1500,rep:-8,rede:-10,conhecimento:0},tag:"Impulsivo",consequence:{type:"neg",icon:"💥",text:"Inimigos no mercado custam caro. Mercado é pequeno."}},
+      {t:"Assumo tudo sozinho sem negociar nada.",impact:{capital:-3000,rep:-2,rede:-2,conhecimento:+2},tag:"Ingênuo",consequence:{type:"neg",icon:"😔",text:"Você foi injusto consigo mesmo."}}
+    ]
+  },
+  {
+    chap:"Capítulo 4 · Escala",icon:"🚀",cat:"Crescimento",
+    title:"A hora de escalar",
+    situation:"Seu negócio está funcionando. Você pode dobrar apostando mais alto.",
+    context:"Tudo indica que é hora de crescer. Mas crescer rápido tem riscos. <strong>Qual é sua estratégia?</strong>",
+    choices:[
+      {t:"Escalo agressivamente. Momento é tudo.",impact:{capital:+8000,rep:+10,rede:+8,conhecimento:+10},tag:"Ambicioso",consequence:{type:"pos",icon:"🚀",text:"Você aproveitou o momentum. Crescimento explosivo."}},
+      {t:"Escalo gradualmente, mantendo controle total.",impact:{capital:+4000,rep:+6,rede:+5,conhecimento:+6},tag:"Cauteloso",consequence:{type:"pos",icon:"📈",text:"Crescimento sólido e sustentável. Sem riscos desnecessários."}},
+      {t:"Espero mais 6 meses para ter mais certeza.",impact:{capital:+1000,rep:0,rede:0,conhecimento:+5},tag:"Hesitante",consequence:{type:"neg",icon:"⏳",text:"A janela se fechou. Concorrente aproveitou o espaço."}},
+      {t:"Franchising imediato sem estrutura pronta.",impact:{capital:+3000,rep:-5,rede:+3,conhecimento:-2},tag:"Precipitado",consequence:{type:"neg",icon:"⚠️",text:"Você cresceu sem base. Problemas por todos os lados."}}
+    ]
+  },
+  {
+    chap:"Capítulo 4 · Escala",icon:"👑",cat:"Liderança",
+    title:"Construindo uma equipe",
+    situation:"Você precisa contratar. Tem candidatos baratos e candidatos caros mas excelentes.",
+    context:"Sua primeira equipe vai definir a cultura da sua empresa. <strong>Como você escolhe?</strong>",
+    choices:[
+      {t:"Contrato os melhores. A empresa cresce com as pessoas.",impact:{capital:-5000,rep:+12,rede:+10,conhecimento:+8},tag:"Visionário",consequence:{type:"pos",icon:"👑",text:"Equipe A-player. Sua empresa cresceu junto."}},
+      {t:"Equilíbrio entre custo e qualidade.",impact:{capital:-2500,rep:+6,rede:+6,conhecimento:+5},tag:"Estratégico",consequence:{type:"pos",icon:"⚖️",text:"Boa decisão. Custo razoável, qualidade aceitável."}},
+      {t:"Contrato os mais baratos para economizar.",impact:{capital:-800,rep:-5,rede:-3,conhecimento:0},tag:"Econômico",consequence:{type:"neg",icon:"💀",text:"Barato que sai caro. Retrabalho destruiu tempo e reputação."}},
+      {t:"Não contrato. Faço tudo sozinho para controlar.",impact:{capital:0,rep:-3,rede:-4,conhecimento:+3},tag:"Centralizador",consequence:{type:"neg",icon:"😩",text:"Você não escala sozinho. Esgotamento total."}}
+    ]
+  },
+  {
+    chap:"Capítulo 4 · Escala",icon:"🌐",cat:"Inovação",
+    title:"A virada tecnológica",
+    situation:"Uma nova tecnologia pode automatizar 70% do seu trabalho. Mas exige aprender do zero.",
+    context:"O mundo mudou. Quem não adaptar vai ficar para trás. <strong>Como você reage?</strong>",
+    choices:[
+      {t:"Mergulho de cabeça. Aprendo e implemento já.",impact:{capital:-1000,rep:+8,rede:+5,conhecimento:+20},tag:"Inovador",consequence:{type:"pos",icon:"🤖",text:"Você se tornou referência em inovação no seu mercado."}},
+      {t:"Estudo com calma e adapto gradualmente.",impact:{capital:-500,rep:+5,rede:+3,conhecimento:+12},tag:"Equilibrado",consequence:{type:"pos",icon:"📚",text:"Adoção consistente. Sem rupturas desnecessárias."}},
+      {t:"Ignoro. Meu jeito ainda funciona.",impact:{capital:0,rep:-6,rede:-4,conhecimento:0},tag:"Resistente",consequence:{type:"neg",icon:"🦕",text:"Mercado evoluiu sem você. Perda de relevância."}},
+      {t:"Terceirizo para especialistas e aprendo depois.",impact:{capital:-3000,rep:+3,rede:+5,conhecimento:+4},tag:"Delegador",consequence:{type:"neu",icon:"🔄",text:"Funcionou mas você ficou dependente de outros."}}
+    ]
+  },
+  {
+    chap:"Capítulo 5 · Legado",icon:"✝️",cat:"Propósito & Fé",
+    title:"O momento de duvidar",
+    situation:"Você perdeu mais do que ganhou esse mês. A voz do desânimo está alta.",
+    context:"Todo empresário enfrenta esse momento. A diferença é o que sustenta você quando tudo parece errado. <strong>O que te mantém em pé?</strong>",
+    choices:[
+      {t:"Minha fé e meu propósito. Isso não muda.",impact:{capital:0,rep:+10,rede:+5,conhecimento:+8},tag:"Inabalável",consequence:{type:"pos",icon:"✝️",text:"Fé como fundamento. Você saiu mais forte da tempestade."}},
+      {t:"Minha visão de longo prazo. Isso é temporário.",impact:{capital:0,rep:+7,rede:+3,conhecimento:+6},tag:"Visionário",consequence:{type:"pos",icon:"🔭",text:"Visão sustenta quando os sentimentos falham."}},
+      {t:"Tomo uma pausa para recarregar.",impact:{capital:+500,rep:0,rede:0,conhecimento:+3},tag:"Humano",consequence:{type:"neu",icon:"🌿",text:"Descanso é estratégia. Voltou com mais clareza."}},
+      {t:"Começo a questionar se vale a pena continuar.",impact:{capital:-2000,rep:-8,rede:-5,conhecimento:0},tag:"Instável",consequence:{type:"neg",icon:"🌊",text:"Dúvida sem ancoragem destrói construções inteiras."}}
+    ]
+  },
+  {
+    chap:"Capítulo 5 · Legado",icon:"💡",cat:"Pensamento Estratégico",
+    title:"A proposta de aquisição",
+    situation:"Uma empresa grande quer comprar seu negócio por R$150.000.",
+    context:"É dinheiro real, agora. Mas significa abrir mão do que você construiu. <strong>O que você decide?</strong>",
+    choices:[
+      {t:"Recuso. Estou construindo algo muito maior.",impact:{capital:0,rep:+10,rede:+8,conhecimento:+5},tag:"Visionário",consequence:{type:"pos",icon:"🏔️",text:"Você acredita no seu potencial. Isso tem valor imenso."}},
+      {t:"Aceito. Capital agora = mais poder para recomeçar.",impact:{capital:+150000,rep:+5,rede:+10,conhecimento:+3},tag:"Estratégico",consequence:{type:"pos",icon:"💰",text:"Liquidez estratégica. Você vai construir algo ainda maior."}},
+      {t:"Negocio por mais. Vale no mínimo o dobro.",impact:{capital:+80000,rep:+8,rede:+5,conhecimento:+5},tag:"Negociador",consequence:{type:"pos",icon:"🤝",text:"Negociação inteligente. Eles aceitaram parcialmente."}},
+      {t:"Aceito com pressa. Medo de perder a oportunidade.",impact:{capital:+120000,rep:-3,rede:-2,conhecimento:0},tag:"Impulsivo",consequence:{type:"neg",icon:"⚡",text:"FOMO custou R$30.000. Decisão por medo sai caro."}}
+    ]
+  },
+  {
+    chap:"Capítulo 5 · Legado",icon:"🌍",cat:"Impacto",
+    title:"Mais do que dinheiro",
+    situation:"Você pode ajudar 100 pessoas ou ganhar mais R$20.000. Escolha um.",
+    context:"Momento que define o empresário que você quer ser. Impacto ou lucro a curto prazo. <strong>O que você escolhe?</strong>",
+    choices:[
+      {t:"Impacto. Dinheiro é consequência do valor gerado.",impact:{capital:-5000,rep:+20,rede:+15,conhecimento:+10},tag:"Visionário",consequence:{type:"pos",icon:"🌍",text:"Você construiu algo raro: autoridade com propósito."}},
+      {t:"Equilibro os dois. Crio um modelo sustentável.",impact:{capital:+8000,rep:+12,rede:+8,conhecimento:+8},tag:"Estratégico",consequence:{type:"pos",icon:"⚖️",text:"Negócio com impacto e lucro. O melhor dos mundos."}},
+      {t:"O dinheiro. Primeiro me estabilizo, depois impacto.",impact:{capital:+20000,rep:+2,rede:+1,conhecimento:0},tag:"Pragmático",consequence:{type:"neu",icon:"💰",text:"Racional. Mas o momento de impactar nunca chega se não for agora."}},
+      {t:"Só o dinheiro importa agora. Impacto depois.",impact:{capital:+20000,rep:-5,rede:-3,conhecimento:0},tag:"Frio",consequence:{type:"neg",icon:"❄️",text:"Lucro sem propósito é só número. Reputação caiu."}}
+    ]
+  },
+  {
+    chap:"Capítulo 6 · Império",icon:"📊",cat:"Investimento",
+    title:"O capital que trabalha",
+    situation:"Você acumulou R$30.000. É hora de fazer esse dinheiro trabalhar.",
+    context:"Liberdade financeira começa quando o dinheiro trabalha mais do que você. <strong>Como você investe?</strong>",
+    choices:[
+      {t:"Diversifico: ações, renda fixa e negócio próprio.",impact:{capital:+15000,rep:+5,rede:+3,conhecimento:+12},tag:"Inteligente",consequence:{type:"pos",icon:"📈",text:"Portfólio diversificado. Crescimento consistente."}},
+      {t:"Reinvisto tudo no meu negócio. Melhor retorno.",impact:{capital:+25000,rep:+8,rede:+5,conhecimento:+8},tag:"Focado",consequence:{type:"pos",icon:"🚀",text:"Alto risco, alto retorno. Apostou em si mesmo e venceu."}},
+      {t:"Guardo tudo na poupança. Segurança primeiro.",impact:{capital:+1200,rep:-2,rede:0,conhecimento:0},tag:"Conservador",consequence:{type:"neg",icon:"📉",text:"Poupança perdeu para a inflação. Dinheiro encolheu."}},
+      {t:"Invisto em criptomoedas. Alto risco, alta recompensa.",impact:{capital:+5000,rep:0,rede:0,conhecimento:+5},tag:"Especulador",consequence:{type:"neu",icon:"🎲",text:"Resultado incerto. Sorte mais do que estratégia."}}
+    ]
+  },
+  {
+    chap:"Capítulo 6 · Império",icon:"🏆",cat:"Reconhecimento",
+    title:"O convite para o palco",
+    situation:"Te convidam para palestrar para 500 pessoas. Você nunca fez isso antes.",
+    context:"Visibilidade é poder no mundo digital. Mas exposição tem riscos. <strong>Você aceita?</strong>",
+    choices:[
+      {t:"Aceito e me preparo com obsessão por 2 semanas.",impact:{capital:+5000,rep:+20,rede:+15,conhecimento:+8},tag:"Corajoso",consequence:{type:"pos",icon:"🎤",text:"Você roubou a cena. Autoridade e rede explodiram."}},
+      {t:"Aceito com honestidade: sou iniciante mas vou dar o meu melhor.",impact:{capital:+2000,rep:+12,rede:+10,conhecimento:+5},tag:"Autêntico",consequence:{type:"pos",icon:"💎",text:"Autenticidade conectou. Público adorou sua honestidade."}},
+      {t:"Recuso. Ainda não estou pronto.",impact:{capital:0,rep:-5,rede:-3,conhecimento:+2},tag:"Inseguro",consequence:{type:"neg",icon:"😔",text:"Oportunidade perdida. O medo cobrou seu preço."}},
+      {t:"Aceito mas cancelo na última hora.",impact:{capital:0,rep:-15,rede:-12,conhecimento:0},tag:"Covarde",consequence:{type:"neg",icon:"💀",text:"Cancelar na última hora destruiu sua reputação no mercado."}}
+    ]
+  },
+  {
+    chap:"Capítulo 6 · Império",icon:"🌐",cat:"Expansão",
+    title:"O mercado internacional",
+    situation:"Oportunidade de entrar no mercado internacional. Risco alto, recompensa enorme.",
+    context:"O mundo é maior do que o Brasil. Mas operar internacionalmente exige nova mentalidade. <strong>Você entra?</strong>",
+    choices:[
+      {t:"Entro com tudo. Penso global desde o começo.",impact:{capital:-8000,rep:+15,rede:+18,conhecimento:+15},tag:"Global",consequence:{type:"pos",icon:"🌍",text:"Você abriu fronteiras. Rede global e conhecimento avançado."}},
+      {t:"Estudo o mercado por 6 meses, depois decido.",impact:{capital:-1000,rep:+5,rede:+5,conhecimento:+12},tag:"Analítico",consequence:{type:"pos",icon:"📊",text:"Decisão informada. Menor risco, entrada mais segura."}},
+      {t:"Não. Foco no Brasil primeiro.",impact:{capital:+3000,rep:0,rede:0,conhecimento:+2},tag:"Local",consequence:{type:"neu",icon:"🇧🇷",text:"Estratégia válida. Mas você deixou o campo aberto."}},
+      {t:"Terceirizo e fico com uma fatia pequena.",impact:{capital:+2000,rep:+2,rede:+4,conhecimento:+3},tag:"Passivo",consequence:{type:"neu",icon:"🔗",text:"Funcionou mas você ficou dependente de terceiros."}}
+    ]
+  },
+  {
+    chap:"Capítulo 7 · Legado",icon:"✝️",cat:"Fé & Propósito",
+    title:"Quando tudo funciona",
+    situation:"Seu negócio está no auge. Você tem dinheiro, fama e liberdade. O que define você agora?",
+    context:"O sucesso revela quem você realmente é. <strong>O que você prioriza no topo?</strong>",
+    choices:[
+      {t:"Usar o sucesso para impactar mais pessoas. Propósito.",impact:{capital:0,rep:+20,rede:+15,conhecimento:+10},tag:"Líder de Impacto",consequence:{type:"pos",icon:"✝️",text:"Você encontrou o verdadeiro sucesso: servir com excelência."}},
+      {t:"Construir sistemas para que o negócio funcione sem mim.",impact:{capital:+20000,rep:+10,rede:+8,conhecimento:+10},tag:"Arquiteto",consequence:{type:"pos",icon:"🏗️",text:"Liberdade real. Você construiu um sistema, não um emprego."}},
+      {t:"Curtir e descansar. Eu mereço.",impact:{capital:+5000,rep:-3,rede:-5,conhecimento:0},tag:"Acomodado",consequence:{type:"neg",icon:"😴",text:"Momentâneo. Impérios sem gestão ruem silenciosamente."}},
+      {t:"Lançar mais projetos sem foco.",impact:{capital:-10000,rep:-5,rede:-3,conhecimento:+3},tag:"Disperso",consequence:{type:"neg",icon:"💨",text:"Sem foco, energia se dilui. Você perdeu o que construiu."}}
+    ]
+  },
+  {
+    chap:"Capítulo 7 · Legado",icon:"👑",cat:"O Legado",
+    title:"Que nome você vai deixar?",
+    situation:"Daqui 20 anos, o que as pessoas vão dizer sobre o que você construiu?",
+    context:"Essa é a última e mais importante decisão. <strong>Qual legado você escolhe construir?</strong>",
+    choices:[
+      {t:"Mudei a vida de muitas pessoas com meu trabalho.",impact:{capital:0,rep:+25,rede:+20,conhecimento:+15},tag:"Legado Real",consequence:{type:"pos",icon:"🌟",text:"Isso é o que realmente importa. Impacto que sobrevive ao tempo."}},
+      {t:"Construí empresas sólidas que empregam centenas.",impact:{capital:+50000,rep:+15,rede:+12,conhecimento:+8},tag:"Construtor",consequence:{type:"pos",icon:"🏛️",text:"Criação de riqueza real para muitas famílias."}},
+      {t:"Ficou rico e viveu bem.",impact:{capital:+30000,rep:+3,rede:0,conhecimento:0},tag:"Acumulador",consequence:{type:"neu",icon:"💰",text:"Uma vida boa. Mas o mundo não vai sentir sua falta."}},
+      {t:"Não penso nisso. Vivo o presente.",impact:{capital:0,rep:-5,rede:-5,conhecimento:0},tag:"Sem Direção",consequence:{type:"neg",icon:"❓",text:"Quem não sabe para onde vai acaba em qualquer lugar."}}
+    ]
+  },
+  {
+    chap:"Capítulo 7 · Legado",icon:"⚜️",cat:"O Teste Final",
+    title:"A decisão mais importante",
+    situation:"Você pode construir um império sozinho ou ajudar 10 pessoas a construírem os deles.",
+    context:"Esse é o teste do verdadeiro líder. <strong>O que você escolhe?</strong>",
+    choices:[
+      {t:"Ajudo os 10. Líderes multiplicam líderes.",impact:{capital:-5000,rep:+30,rede:+25,conhecimento:+20},tag:"Titan Founder",consequence:{type:"pos",icon:"👑",text:"TITAN FOUNDER. Você escolheu o caminho mais raro e mais poderoso."}},
+      {t:"Construo o meu e sirvo de inspiração para eles.",impact:{capital:+30000,rep:+15,rede:+10,conhecimento:+10},tag:"Empire Builder",consequence:{type:"pos",icon:"⚜️",text:"Liderança pelo exemplo. Seu sucesso inspira outros."}},
+      {t:"Foco em mim primeiro. Depois ajudo.",impact:{capital:+20000,rep:+5,rede:+3,conhecimento:+5},tag:"Executor",consequence:{type:"neu",icon:"⚡",text:"Pragmático. Mas o 'depois' nem sempre chega."}},
+      {t:"Cada um por si. Negócio é competição.",impact:{capital:+15000,rep:-8,rede:-10,conhecimento:0},tag:"Solitário",consequence:{type:"neg",icon:"🏝️",text:"Vitória solitária. Impérios precisam de aliados."}}
+    ]
+  }
+];
+
+/* PROFILES */
+const PROFILES=[
+  {
+    min:0,max:15,badge:"🌱",level:"Sonhador Acordando",
+    tagline:"Você tem o ponto de partida mais poderoso: a consciência.",
+    rare:"Você está no início da jornada — como todo grande construtor já esteve.",
+    rarity:55,
+    desc:"Você ainda está descobrindo seu potencial. Suas decisões mostraram hesitação e busca por segurança. <strong>Mas isso não é fraqueza — é o estado inicial de todo grande empreendedor.</strong> O que separa você do topo não é talento. É a decisão de começar.",
+    traits:[{i:"🌱",n:"Potencial Latente",v:"A semente está plantada. Agora precisa regar todo dia."},{i:"📚",n:"Fome de Conhecimento",v:"Estude empreendedorismo todo dia. Mínimo 30 minutos."},{i:"⏰",n:"Ação Urgente",v:"Comece antes de estar pronto. Aprendizado vem da execução."},{i:"🤝",n:"Busque Mentores",v:"Nunca subestime o poder de estar perto de quem já chegou lá."}],
+    quote:{t:"Todo império começa com uma <span>decisão que ninguém viu.</span>"}
+  },
+  {
+    min:16,max:30,badge:"⚡",level:"Executor em Formação",
+    tagline:"Você age. Isso já te coloca à frente da maioria.",
+    rare:"Você supera 65% dos participantes.",
+    rarity:35,
+    desc:"Você tem ação, mas ainda lhe falta consistência e visão estratégica. <strong>Você começa bem mas às vezes se perde no caminho.</strong> O próximo nível não é sobre trabalhar mais — é sobre trabalhar com mais intenção.",
+    traits:[{i:"⚡",n:"Executor Real",v:"Você age. Agora precise agir com mais estratégia."},{i:"🎯",n:"Foco",v:"Um objetivo de cada vez. Profundidade supera amplitude."},{i:"💰",n:"Inteligência Financeira",v:"Faça seu dinheiro trabalhar por você."},{i:"🔥",n:"Consistência",v:"Hábitos inegociáveis constroem impérios."}],
+    quote:{t:"<span>Consistência mediana</span> supera genialidade inconsistente. Sempre."}
+  },
+  {
+    min:31,max:45,badge:"🔭",level:"Estrategista",
+    tagline:"Você pensa antes de agir. Isso é raro.",
+    rare:"Você está no top 25% dos participantes.",
+    rarity:25,
+    desc:"Você tem visão estratégica e toma decisões pensadas. Raramente age por impulso e entende que negócios são construídos com consistência. <strong>Seu desafio agora é velocidade.</strong> Você pensa certo mas às vezes demora para agir.",
+    traits:[{i:"🔭",n:"Visão Estratégica",v:"Você enxerga o longo prazo. Agora execute mais rápido."},{i:"🚀",n:"Velocidade",v:"Decida mais rápido. A análise tem um limite útil."},{i:"💎",n:"Produto",v:"Construa algo que funcione sem você."},{i:"👥",n:"Rede Poderosa",v:"Seu próximo salto está nas pessoas certas."}],
+    quote:{t:"<span>Análise sem execução</span> é só contemplação bonita."}
+  },
+  {
+    min:46,max:60,badge:"🔥",level:"Construtor de Impacto",
+    tagline:"Você constrói enquanto outros planejam.",
+    rare:"Você está no top 15% dos participantes.",
+    rarity:15,
+    desc:"Suas decisões mostram clareza, coragem e inteligência financeira. Você não tem medo de errar e aprende rápido com os erros. <strong>Você está no caminho certo para construir algo grande.</strong> O que falta é audácia para pensar ainda maior.",
+    traits:[{i:"🔥",n:"Executor Poderoso",v:"Você age com intenção. Continue assim."},{i:"💡",n:"Inovador",v:"Você cria soluções onde outros veem problemas."},{i:"👑",n:"Liderança Natural",v:"Pessoas te seguem naturalmente."},{i:"🌍",n:"Visão de Escala",v:"Pense 10x maior do que está pensando agora."}],
+    quote:{t:"Não estou competindo com ninguém. <span>Estou construindo meu legado.</span>"}
+  },
+  {
+    min:61,max:75,badge:"⚜️",level:"Empire Builder ⚜️",
+    tagline:"Você pensa em sistemas, legado e escala.",
+    rare:"⚡ Você está no top 8% de todos os participantes.",
+    rarity:8,
+    desc:"Raridade real. Suas decisões revelam uma mente que opera em múltiplos níveis simultaneamente — você vê oportunidades, calcula riscos e age com propósito. <strong>Você não está construindo um negócio. Está construindo um sistema.</strong>",
+    traits:[{i:"⚜️",n:"Arquiteto de Sistemas",v:"Você constrói máquinas que funcionam sem você."},{i:"🌍",n:"Impacto Real",v:"Seu trabalho toca vidas além do lucro."},{i:"👑",n:"Liderança Genuína",v:"Você eleva todos ao seu redor."},{i:"✝️",n:"Propósito Inabalável",v:"Fé e visão te sustentam nos momentos impossíveis."}],
+    quote:{t:"<span>Silêncio agora.</span> Resultado depois."}
+  },
+  {
+    min:76,max:200,badge:"👑",level:"Titan Founder 👑",
+    tagline:"Menos de 1% pensa como você.",
+    rare:"⚡ ELITE. Você está no top 1% absoluto.",
+    rarity:1,
+    desc:"Isso é excepcional. Suas decisões revelam uma mente que vai além do óbvio — você pensa em impacto, legado e sistemas com uma clareza que a maioria sequer considera. <strong>Você não está construindo uma empresa. Está construindo um movimento.</strong> O mundo vai conhecer seu nome.",
+    traits:[{i:"👑",n:"Titan Founder",v:"Você multiplica líderes. Isso é o nível mais raro."},{i:"🌍",n:"Legado Global",v:"Sua visão transcende lucro. É sobre transformar o mundo."},{i:"⚡",n:"Execução Implacável",v:"Você cria as condições que outros esperam aparecer."},{i:"✝️",n:"Fé Como Âncora",v:"Inabalável quando tudo desmorona. Isso move montanhas."}],
+    quote:{t:"<span>Uma minoria extremamente rara</span> muda o mundo. Você é essa minoria."}
+  }
+];
+
+/* ══════════════════
+   GAME LOGIC
+══════════════════ */
+let gameChoices=[];
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo(0,0);
+}
+
+function showToast(icon,title,sub){
+  document.getElementById('ti').textContent=icon;
+  document.getElementById('tt').textContent=title;
+  document.getElementById('ts').textContent=sub;
+  const t=document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+function updateDisplay(){
+  const fmt=v=>v>=1000?'R$'+(v/1000).toFixed(v%1000===0?0:1)+'k':'R$'+v;
+  document.getElementById('sv-capital').textContent=fmt(state.capital);
+  document.getElementById('hd-capital').textContent=fmt(state.capital);
+  document.getElementById('sv-rep').textContent=state.rep;
+  document.getElementById('hd-rep').textContent=state.rep;
+  document.getElementById('sv-rede').textContent=state.rede;
+  document.getElementById('sv-conhecimento').textContent=state.conhecimento;
+}
+
+function animateStat(id,delta){
+  const el=document.getElementById('sc-'+id);
+  const val=document.getElementById('sv-'+id);
+  if(delta>0){val.classList.add('positive');setTimeout(()=>val.classList.remove('positive'),600)}
+  else if(delta<0){val.classList.add('negative');setTimeout(()=>val.classList.remove('negative'),600)}
+  el.classList.add('glow');setTimeout(()=>el.classList.remove('glow'),600);
+}
+
+function startGame(){
+  initAudio();
+  // Narrative reveal
+  const lines=document.querySelectorAll('.i-nar-line');
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('show'),300+i*350));
+  setTimeout(()=>{
+    showScreen('sg');
+    renderScenario();
+  },lines.length*350+800);
+}
+
+function renderScenario(){
+  answered=false;
+  const sc=SCENARIOS[cur];
+  const pct=Math.round((cur/SCENARIOS.length)*100);
+
+  document.getElementById('prog-chap').textContent=sc.chap;
+  document.getElementById('prog-num').textContent=`${cur+1} / ${SCENARIOS.length}`;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('sc-icon-el').textContent=sc.icon;
+  document.getElementById('sc-cat-el').textContent=sc.cat;
+  document.getElementById('sc-title-el').textContent=sc.title;
+  document.getElementById('sc-sit-el').textContent=sc.situation;
+  document.getElementById('sc-ctx-el').innerHTML=sc.context;
+
+  // Hide consequence
+  document.getElementById('consequence').classList.remove('show','pos','neg','neu');
+
+  const opts=document.getElementById('choices-el');
+  opts.innerHTML='';
+  const L=['A','B','C','D'];
+  sc.choices.forEach((c,i)=>{
+    const btn=document.createElement('button');
+    btn.className='choice';
+    btn.style.cssText=`opacity:0;transform:translateY(8px);transition:opacity .3s ${i*.07}s ease,transform .3s ${i*.07}s ease,border-color .22s,background .22s`;
+    
+    const impactHTML=Object.entries(c.impact).map(([k,v])=>{
+      const icons={capital:'💰',rep:'⭐',rede:'🤝',conhecimento:'🧠'};
+      const cls=v>0?'pos':v<0?'neg':'neu';
+      const sign=v>0?'+':'';
+      return `<span class="ch-imp-item ${cls}">${icons[k]}${sign}${v}</span>`;
+    }).join('');
+
+    btn.innerHTML=`<span class="ch-letter">${L[i]}</span><div class="ch-wrap"><span class="ch-text">${c.t}</span><div class="ch-impact">${impactHTML}</div></div>`;
+    btn.onclick=()=>makeChoice(btn,c,i);
+    opts.appendChild(btn);
+    requestAnimationFrame(()=>setTimeout(()=>{btn.style.opacity='1';btn.style.transform='translateY(0)'},i*60));
+  });
+}
+
+function makeChoice(btn,choice,idx){
+  if(answered)return;
+  answered=true;
+  initAudio();
+  playClick();
+
+  document.querySelectorAll('.choice').forEach(b=>b.style.pointerEvents='none');
+  btn.classList.add('chosen');
+
+  // Apply impacts
+  Object.entries(choice.impact).forEach(([k,v])=>{
+    if(v!==0){animateStat(k,v);state[k]+=v;}
+  });
+  state.capital=Math.max(0,state.capital);
+  state.rep=Math.max(0,state.rep);
+  state.rede=Math.max(0,state.rede);
+  state.conhecimento=Math.max(0,state.conhecimento);
+  updateDisplay();
+
+  // Log
+  gameChoices.push({q:SCENARIOS[cur].title,ch:choice.t,tag:choice.tag,impact:choice.impact});
+
+  // Consequence
+  const cons=choice.consequence;
+  setTimeout(()=>{
+    const cel=document.getElementById('consequence');
+    const iEl=document.getElementById('cons-icon');
+    const tEl=document.getElementById('cons-text');
+    iEl.textContent=cons.icon;
+    tEl.textContent=cons.text;
+    cel.className='consequence show '+cons.type;
+    if(cons.type==='pos')playGood(); else if(cons.type==='neg')playBad();
+
+    // Special toasts
+    if(cur===4)showToast('📊','Metade da jornada!','Suas decisões estão moldando seu perfil.');
+    if(cur===9)showToast('🔥','10 decisões tomadas!','O Império está se formando...');
+    if(cur===14)showToast('⚜️','Quase lá!','As últimas decisões são as mais importantes.');
+
+    setTimeout(()=>{
+      cur++;
+      if(cur<SCENARIOS.length){
+        const card=document.getElementById('scenario-card');
+        const opts=document.getElementById('choices-el');
+        card.style.transition='all .2s';card.style.opacity='0';card.style.transform='translateX(16px)';
+        opts.style.transition='all .2s';opts.style.opacity='0';
+        setTimeout(()=>{
+          renderScenario();
+          card.style.opacity='1';card.style.transform='translateX(0)';
+          opts.style.opacity='1';
+        },220);
+      } else showResult();
+    },1800);
+  },400);
+}
+
+function showResult(){
+  playWin();
+  showScreen('sr');
+
+  const totalScore=state.rep+state.rede+state.conhecimento+Math.floor(state.capital/1000);
+  const profile=PROFILES.find(p=>totalScore>=p.min&&totalScore<=p.max)||PROFILES[0];
+
+  document.getElementById('r-badge').textContent=profile.badge;
+  document.getElementById('r-rare').textContent=profile.rare;
+  document.getElementById('r-level').innerHTML=profile.level;
+  document.getElementById('r-tagline').textContent=profile.tagline;
+  document.getElementById('r-rarity').textContent=`⚡ Seu perfil é mais raro que o de ${100-profile.rarity}% dos jogadores`;
+  document.getElementById('r-desc').innerHTML=profile.desc;
+  document.getElementById('r-quote').innerHTML=`<p>"${profile.quote.t}"</p>`;
+
+  // Score animation
+  const scoreVal=Math.min(Math.round((totalScore/100)*100),100);
+  setTimeout(()=>{
+    const arc=document.getElementById('r-arc');
+    const circ=340;
+    arc.style.strokeDashoffset=circ-(circ*(scoreVal/100));
+    let n=0;const el=document.getElementById('r-score-num');
+    const t=setInterval(()=>{n+=2;if(n>scoreVal)n=scoreVal;el.textContent=n;if(n>=scoreVal)clearInterval(t)},18);
+  },300);
+
+  // Resource bars
+  const maxV=Math.max(state.rep,state.rede,state.conhecimento,100);
+  const bars=[
+    {l:'💰 Capital',v:Math.min(Math.round(state.capital/1000),100)},
+    {l:'⭐ Reputação',v:Math.min(state.rep,100)},
+    {l:'🤝 Rede',v:Math.min(state.rede,100)},
+    {l:'🧠 Conhecimento',v:Math.min(state.conhecimento,100)},
+  ];
+  document.getElementById('r-bars-inner').innerHTML=bars.map(b=>`
+    <div class="r-bar">
+      <div class="r-bar-top"><span class="r-bar-l">${b.l}</span><span class="r-bar-n">${b.v}</span></div>
+      <div class="r-bar-track"><div class="r-bar-fill" data-v="${b.v}"></div></div>
+    </div>
+  `).join('');
+  setTimeout(()=>document.querySelectorAll('.r-bar-fill').forEach(el=>{el.style.width=el.dataset.v+'%'}),500);
+
+  // Traits
+  document.getElementById('r-traits').innerHTML=profile.traits.map(t=>`
+    <div class="res-stat">
+      <div class="res-stat-icon">${t.i}</div>
+      <div class="res-stat-name">${t.n}</div>
+      <div class="res-stat-val">${t.v}</div>
+    </div>
+  `).join('');
+
+  // Choices log (top 5 impactful)
+  const topChoices=gameChoices.slice(0,5);
+  document.getElementById('r-log-inner').innerHTML=topChoices.map((c,i)=>`
+    <div class="r-log-item">
+      <span class="r-log-num">${i+1}</span>
+      <div class="r-log-text"><strong>${c.q}:</strong> "${c.ch.substring(0,60)}..." <span style="color:var(--gold)">— ${c.tag}</span></div>
+    </div>
+  `).join('');
+}
+
+function shareResult(){
+  initAudio();
+  const level=document.getElementById('r-level').textContent;
+  const score=document.getElementById('r-score-num').textContent;
+  const rare=document.getElementById('r-rarity').textContent;
+  const text=`⚜️ EMPIRE GAME — CE · Caminho do Empresário\n\nFiz o jogo de decisões do Empire Builders e meu resultado foi:\n\n${level}\nEmpire Score: ${score}\n${rare}\n\nTome suas decisões: linktr.ee/caminhodoempresario\n\n@_fabricio_ce #EmpireGame #EmpireBuilders #CaminhoDoEmpresário`;
+  if(navigator.share){navigator.share({title:'EMPIRE GAME ⚜️',text})}
+  else{
+    navigator.clipboard.writeText(text).then(()=>{
+      const btn=document.querySelector('.btn-g');
+      const orig=btn.textContent;
+      btn.textContent='✓ Copiado! Cole onde quiser.';
+      btn.style.background='linear-gradient(135deg,#4CAF50,#66BB6A)';
+      setTimeout(()=>{btn.textContent=orig;btn.style.background=''},3000);
+    });
+  }
+}
+
+function restartGame(){
+  cur=0;answered=false;gameChoices=[];
+  state={capital:1000,rep:10,rede:5,conhecimento:10};
+  updateDisplay();
+  showScreen('si');
+  document.querySelectorAll('.i-nar-line').forEach(l=>l.classList.remove('show'));
+}
+
+// Init
+updateDisplay();
+window.addEventListener('load',()=>{
+  const lines=document.querySelectorAll('.i-nar-line');
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('show'),500+i*380));
+});
+</script>
+</body>
+</html>

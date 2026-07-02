@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bem-vindo à Comunidade ⚜️ | Empire Builders</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@1,400;1,600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030303;--surface:#0D0D0D;--border:#1C1C1C;
+  --gold:#C9A84C;--gold2:#E8C96A;
+  --gdim:rgba(201,168,76,0.08);--gbdr:rgba(201,168,76,0.28);
+  --white:#F5F2EC;--white2:#DDD8D0;--text:#9A9088;--muted:#484848;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
+
+canvas#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+
+.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:100;overflow:hidden}
+.cp{position:absolute;width:8px;height:8px;border-radius:2px;animation:fall linear forwards}
+@keyframes fall{0%{opacity:1;transform:translateY(-10px) rotate(0)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+
+.emblem{width:100px;height:100px;border-radius:50%;border:1px solid var(--gbdr);background:radial-gradient(circle,var(--gdim),transparent);display:flex;align-items:center;justify-content:center;margin:0 auto 28px;font-size:42px;position:relative;animation:pulse 3s ease-in-out infinite}
+.emblem::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(201,168,76,.12)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.2)}50%{box-shadow:0 0 0 20px rgba(201,168,76,0)}}
+
+.eyebrow{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.title{font-family:'Syne',sans-serif;font-size:clamp(32px,6vw,60px);font-weight:800;color:var(--white);line-height:.92;letter-spacing:-1px;margin-bottom:16px}
+.title .g{color:var(--gold)}
+.sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,2.5vw,22px);color:var(--text);margin-bottom:40px;max-width:480px}
+
+.divider{width:40px;height:1px;background:var(--gold);margin:0 auto 40px;opacity:.5}
+
+/* NEXT STEPS */
+.steps{display:flex;flex-direction:column;gap:12px;max-width:480px;width:100%;margin-bottom:40px}
+.step{display:flex;gap:16px;align-items:flex-start;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-align:left;transition:border-color .3s;animation:slideUp .5s ease both}
+.step:hover{border-color:var(--gbdr)}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.step:nth-child(1){animation-delay:.2s}
+.step:nth-child(2){animation-delay:.35s}
+.step:nth-child(3){animation-delay:.5s}
+.step:nth-child(4){animation-delay:.65s}
+.step-num{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;color:var(--gold);min-width:24px;padding-top:2px}
+.step-info{}
+.step-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--white);margin-bottom:4px}
+.step-desc{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* SOCIAL BUTTONS */
+.socials{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;margin-bottom:32px}
+.soc-btn{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 24px;border-radius:4px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .3s;animation:slideUp .5s ease both}
+.soc-btn.gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#030303}
+.soc-btn.gold:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.3)}
+.soc-btn.outline{background:transparent;border:1px solid var(--border);color:var(--white2)}
+.soc-btn.outline:hover{border-color:var(--gbdr);color:var(--gold)}
+.soc-btn:nth-child(1){animation-delay:.8s}
+.soc-btn:nth-child(2){animation-delay:.9s}
+.soc-btn:nth-child(3){animation-delay:1s}
+
+.quote{padding:20px 24px;background:var(--gdim);border-left:2px solid var(--gold);border-radius:0 4px 4px 0;max-width:480px;text-align:left;margin-bottom:24px}
+.quote p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:var(--white);line-height:1.4}
+.quote p span{color:var(--gold)}
+
+.footer-txt{font-size:10px;color:var(--muted);letter-spacing:1px}
+.footer-txt a{color:var(--gold);text-decoration:none}
+
+@media(max-width:520px){
+  .step{padding:14px 16px}
+  .socials{max-width:100%}
+}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div class="confetti-wrap" id="conf"></div>
+
+<div class="wrap">
+  <div class="emblem">⚜️</div>
+  <div class="eyebrow">CE · Empire Builders · Caminho do Empresário</div>
+  <h1 class="title">Bem-vindo ao<br><span class="g">Caminho.</span></h1>
+  <p class="sub">"Você tomou uma decisão que a maioria nunca toma. Isso já te diferencia."</p>
+  <div class="divider"></div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-info">
+        <div class="step-title">Verifique seu e-mail</div>
+        <div class="step-desc">Você receberá conteúdos exclusivos sobre mentalidade, negócios e investimento diretamente na sua caixa de entrada.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-info">
+        <div class="step-title">Siga no Instagram</div>
+        <div class="step-desc">Conteúdo diário sobre construção de riqueza, disciplina e liberdade. @_fabricio_ce</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-info">
+        <div class="step-title">Faça o teste Empire Mindset</div>
+        <div class="step-desc">Descubra seu nível real de mentalidade empreendedora em 25 perguntas. Gratuito.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <div class="step-info">
+        <div class="step-title">Instale o app de hábitos</div>
+        <div class="step-desc">Construa disciplina todos os dias com o Empire Habits. Sistema de XP e conquistas.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="socials">
+    <a href="https://www.instagram.com/_fabricio_ce" target="_blank" class="soc-btn gold">📱 Seguir @_fabricio_ce</a>
+    <a href="empire-mindset.html" class="soc-btn outline">🧠 Fazer o teste Empire Mindset</a>
+    <a href="empire-habits.html" class="soc-btn outline">⚜️ Instalar Empire Habits</a>
+  </div>
+
+  <div class="quote">
+    <p>"Silêncio agora. <span>Resultado depois.</span>"</p>
+  </div>
+
+  <div class="footer-txt">
+    <a href="fabricio.html">← Voltar para o site</a> · 
+    <a href="https://linktr.ee/caminhodoempresario" target="_blank">linktr.ee/caminhodoempresario</a>
+  </div>
+</div>
+
+<script>
+/* CANVAS */
+(function(){
+  const c=document.getElementById('bgc'),x=c.getContext('2d');
+  let W,H,P=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  for(let i=0;i<50;i++)P.push({X:Math.random()*2000,Y:Math.random()*2000,vx:(Math.random()-.5)*.1,vy:-(Math.random()*.2+.04),o:Math.random()*.3+.04,r:Math.random()*1.4+.3});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{
+      if(p.X>W)p.X=0;if(p.X<0)p.X=W;
+      x.beginPath();x.arc(p.X,p.Y,p.r,0,Math.PI*2);
+      x.fillStyle=`rgba(201,168,76,${p.o})`;x.fill();
+      p.X+=p.vx;p.Y+=p.vy;
+      if(p.Y<-5){p.Y=H+5;p.X=Math.random()*W}
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* CONFETTI */
+(function(){
+  const wrap=document.getElementById('conf');
+  const colors=['#C9A84C','#E8C96A','#F5DFA0','#ffffff','#4CAF50'];
+  for(let i=0;i<60;i++){
+    const p=document.createElement('div');
+    p.className='cp';
+    p.style.cssText=`
+      left:${Math.random()*100}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${1+Math.random()*2}s;
+      animation-delay:${Math.random()*.8}s;
+      width:${4+Math.random()*8}px;
+      height:${4+Math.random()*8}px;
+    `;
+    wrap.appendChild(p);
+    setTimeout(()=>p.remove(),3000);
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog ⚜️ | Empire Builders · Caminho do Empresário</title>
+<meta name="description" content="Artigos sobre mentalidade, empreendedorismo, investimento e fé. Por Fabrício CE — Empire Builders.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#030303;--bg2:#080808;--surface:#0D0D0D;--surface2:#121212;
+  --border:#1C1C1C;--border2:#252525;
+  --gold:#C9A84C;--gold2:#E8C96A;
+  --gdim:rgba(201,168,76,0.08);--gbdr:rgba(201,168,76,0.28);
+  --white:#F5F2EC;--white2:#DDD8D0;--text:#9A9088;--muted:#484848;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden}
+canvas#bgc{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(to bottom,rgba(3,3,3,.97),transparent)}
+.nav-logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold);text-decoration:none}
+.nav-logo span{color:var(--white2)}
+.nav-links{display:flex;gap:24px;list-style:none}
+.nav-links a{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover{color:var(--gold)}
+
+.main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:110px 24px 80px}
+
+.hero{text-align:center;margin-bottom:64px}
+.h-eyebrow{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.h-title{font-family:'Syne',sans-serif;font-size:clamp(32px,6vw,60px);font-weight:800;color:var(--white);letter-spacing:-1px;line-height:.92;margin-bottom:14px}
+.h-title .g{color:var(--gold)}
+.h-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,2.5vw,18px);color:var(--text)}
+
+/* CATEGORIES */
+.cats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:48px}
+.cat{padding:8px 18px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'Syne',sans-serif}
+.cat:hover,.cat.active{background:var(--gdim);border-color:var(--gold);color:var(--gold)}
+
+/* FEATURED */
+.featured{display:grid;grid-template-columns:1.5fr 1fr;gap:14px;margin-bottom:14px}
+.article-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;text-decoration:none;display:block;transition:all .3s;position:relative}
+.article-card:hover{border-color:var(--gbdr);transform:translateY(-3px)}
+.article-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gbdr),transparent);opacity:0;transition:opacity .3s}
+.article-card:hover::before{opacity:1}
+
+.card-img{height:200px;background:linear-gradient(135deg,var(--surface2),var(--bg2));display:flex;align-items:center;justify-content:center;font-size:48px;border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.card-img.small{height:100px;font-size:32px}
+.card-img-bg{position:absolute;inset:0;background:radial-gradient(circle at center,rgba(201,168,76,.08),transparent 70%)}
+
+.card-body{padding:20px}
+.card-body.small{padding:16px}
+.card-cat{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.card-title{font-family:'Syne',sans-serif;font-size:clamp(15px,2vw,19px);font-weight:800;color:var(--white);line-height:1.15;margin-bottom:8px}
+.card-title.small{font-size:14px}
+.card-desc{font-size:12px;color:var(--muted);line-height:1.65;margin-bottom:12px}
+.card-meta{display:flex;align-items:center;gap:12px;font-size:10px;color:var(--muted)}
+.card-meta-dot{width:3px;height:3px;border-radius:50%;background:var(--muted)}
+.card-read{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+
+/* GRID */
+.articles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:48px}
+
+/* SIDEBAR LAYOUT */
+.content-row{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start}
+.articles-col{}
+.sidebar{}
+
+.sidebar-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:22px;margin-bottom:14px}
+.sidebar-card::before{content:'';display:block;height:1px;background:linear-gradient(90deg,transparent,var(--gbdr),transparent);margin:-22px -22px 18px}
+.sb-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.sb-ebook{text-align:center}
+.sb-ebook-img{font-size:40px;margin-bottom:12px}
+.sb-ebook-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--white);margin-bottom:6px;line-height:1.2}
+.sb-ebook-desc{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.sb-btn{display:block;width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#030303;text-align:center;text-decoration:none;transition:all .3s;cursor:pointer}
+.sb-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(201,168,76,.25)}
+.sb-btn.outline{background:transparent;border:1px solid var(--border);color:var(--muted);margin-top:8px}
+.sb-btn.outline:hover{border-color:var(--gbdr);color:var(--gold);box-shadow:none}
+
+.pop-list{display:flex;flex-direction:column;gap:12px}
+.pop-item{display:flex;gap:12px;align-items:flex-start;cursor:pointer;transition:opacity .2s}
+.pop-item:hover{opacity:.8}
+.pop-num{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--border2);min-width:28px;line-height:1}
+.pop-title{font-size:12px;color:var(--white2);line-height:1.45;font-weight:500}
+.pop-cat{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+.tags-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.tag{padding:6px 12px;background:var(--bg2);border:1px solid var(--border2);border-radius:2px;font-size:10px;color:var(--muted);cursor:pointer;transition:all .2s}
+.tag:hover{border-color:var(--gbdr);color:var(--gold)}
+
+/* NEWSLETTER */
+.newsletter{background:var(--gdim);border:1px solid var(--gbdr);border-radius:6px;padding:32px;text-align:center;margin-top:48px;position:relative;overflow:hidden}
+.newsletter::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.nl-title{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,28px);font-weight:800;color:var(--white);margin-bottom:10px}
+.nl-title em{color:var(--gold);font-style:normal}
+.nl-sub{font-size:13px;color:var(--text);margin-bottom:24px;line-height:1.7}
+.nl-form{display:flex;gap:10px;max-width:420px;margin:0 auto}
+.nl-input{flex:1;padding:13px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:3px;font-size:13px;color:var(--white);font-family:'Inter',sans-serif;outline:none;transition:border-color .3s}
+.nl-input::placeholder{color:var(--muted)}
+.nl-input:focus{border-color:var(--gbdr)}
+.nl-btn{padding:13px 24px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#030303;cursor:pointer;white-space:nowrap;transition:all .3s}
+.nl-btn:hover{transform:translateY(-1px)}
+
+footer{padding:40px 24px;border-top:1px solid var(--border);text-align:center;position:relative;z-index:1}
+footer p{font-size:10px;color:var(--muted);line-height:1.8}
+footer a{color:var(--gold);text-decoration:none}
+
+.rev{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.rev.vis{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:18px 24px}
+  .nav-links{display:none}
+  .main{padding:90px 16px 60px}
+  .featured{grid-template-columns:1fr}
+  .articles-grid{grid-template-columns:1fr 1fr}
+  .content-row{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .nl-form{flex-direction:column}
+}
+@media(max-width:480px){
+  .articles-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+
+<nav>
+  <a href="fabricio.html" class="nav-logo">CE ⚜️ <span>Empire Builders</span></a>
+  <ul class="nav-links">
+    <li><a href="fabricio.html">Início</a></li>
+    <li><a href="empire-mindset.html">Quiz</a></li>
+    <li><a href="empire-ebook.html">eBook</a></li>
+    <li><a href="empire-habits.html">App</a></li>
+  </ul>
+</nav>
+
+<div class="main">
+  <div class="hero rev">
+    <div class="h-eyebrow">Conhecimento que constrói impérios</div>
+    <h1 class="h-title">Blog <span class="g">Empire</span> ⚜️</h1>
+    <p class="h-sub">"Cada artigo é um tijolo. Leia, aplique, construa."</p>
+  </div>
+
+  <div class="cats rev">
+    <div class="cat active" onclick="filterCat(this,'todos')">Todos</div>
+    <div class="cat" onclick="filterCat(this,'mentalidade')">🧠 Mentalidade</div>
+    <div class="cat" onclick="filterCat(this,'negocios')">🚀 Negócios</div>
+    <div class="cat" onclick="filterCat(this,'investimento')">📈 Investimento</div>
+    <div class="cat" onclick="filterCat(this,'disciplina')">⚔️ Disciplina</div>
+    <div class="cat" onclick="filterCat(this,'fe')">✝️ Fé</div>
+  </div>
+
+  <div class="content-row">
+    <div class="articles-col">
+
+      <!-- FEATURED -->
+      <div class="featured rev" id="featured">
+        <a href="#" class="article-card" data-cat="mentalidade" onclick="openArticle(0);return false">
+          <div class="card-img"><div class="card-img-bg"></div>🧠</div>
+          <div class="card-body">
+            <div class="card-cat">🧠 Mentalidade</div>
+            <div class="card-title">A diferença entre quem pensa em rico e quem pensa como rico</div>
+            <div class="card-desc">Não é sobre quanto você ganha. É sobre o que você faz com o que ganha — e por quê a maioria nunca sai do ciclo.</div>
+            <div class="card-meta">
+              <span>Fabrício CE</span>
+              <span class="card-meta-dot"></span>
+              <span>5 min de leitura</span>
+              <span class="card-meta-dot"></span>
+              <span class="card-read">Ler agora →</span>
+            </div>
+          </div>
+        </a>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <a href="#" class="article-card" data-cat="disciplina" onclick="openArticle(1);return false">
+            <div class="card-img small"><div class="card-img-bg"></div>⚔️</div>
+            <div class="card-body small">
+              <div class="card-cat">⚔️ Disciplina</div>
+              <div class="card-title small">Por que motivação não funciona — e o que funciona</div>
+              <div class="card-meta">
+                <span>3 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span>
+              </div>
+            </div>
+          </a>
+          <a href="#" class="article-card" data-cat="negocios" onclick="openArticle(2);return false">
+            <div class="card-img small"><div class="card-img-bg"></div>🚀</div>
+            <div class="card-body small">
+              <div class="card-cat">🚀 Negócios</div>
+              <div class="card-title small">Como começar um negócio digital com R$0</div>
+              <div class="card-meta">
+                <span>7 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- GRID -->
+      <div class="articles-grid" id="articles-grid">
+        <a href="#" class="article-card rev" data-cat="investimento" onclick="openArticle(3);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>📈</div>
+          <div class="card-body">
+            <div class="card-cat">📈 Investimento</div>
+            <div class="card-title small">Investir com R$100: o guia para quem está começando</div>
+            <div class="card-desc">Você não precisa de muito para começar. Precisa começar para ter muito.</div>
+            <div class="card-meta"><span>6 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+        <a href="#" class="article-card rev" data-cat="fe" onclick="openArticle(4);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>✝️</div>
+          <div class="card-body">
+            <div class="card-cat">✝️ Fé</div>
+            <div class="card-title small">Fé não é fraqueza — é a base de todo grande construtor</div>
+            <div class="card-desc">O que os maiores empresários do mundo têm em comum com a espiritualidade.</div>
+            <div class="card-meta"><span>4 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+        <a href="#" class="article-card rev" data-cat="mentalidade" onclick="openArticle(5);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>💡</div>
+          <div class="card-body">
+            <div class="card-cat">🧠 Mentalidade</div>
+            <div class="card-title small">5 crenças que te mantêm pobre sem você perceber</div>
+            <div class="card-desc">A maioria das limitações financeiras não está na carteira — está na cabeça.</div>
+            <div class="card-meta"><span>5 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+        <a href="#" class="article-card rev" data-cat="negocios" onclick="openArticle(6);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>📱</div>
+          <div class="card-body">
+            <div class="card-cat">🚀 Negócios</div>
+            <div class="card-title small">Conteúdo digital: como transformar conhecimento em renda</div>
+            <div class="card-desc">Você já sabe algo que outras pessoas pagariam para aprender. Só falta estrutura.</div>
+            <div class="card-meta"><span>8 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+        <a href="#" class="article-card rev" data-cat="disciplina" onclick="openArticle(7);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>🌅</div>
+          <div class="card-body">
+            <div class="card-cat">⚔️ Disciplina</div>
+            <div class="card-title small">A rotina matinal que muda tudo em 90 dias</div>
+            <div class="card-desc">Não é sobre acordar às 4h. É sobre o que você faz nas primeiras horas que define o seu dia.</div>
+            <div class="card-meta"><span>5 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+        <a href="#" class="article-card rev" data-cat="investimento" onclick="openArticle(8);return false">
+          <div class="card-img" style="height:120px;font-size:32px"><div class="card-img-bg"></div>💰</div>
+          <div class="card-body">
+            <div class="card-cat">📈 Investimento</div>
+            <div class="card-title small">Renda passiva com 19 anos: é possível?</div>
+            <div class="card-desc">O que aprendi tentando construir múltiplas fontes de renda antes dos 20 anos.</div>
+            <div class="card-meta"><span>6 min</span><span class="card-meta-dot"></span><span class="card-read">Ler →</span></div>
+          </div>
+        </a>
+      </div>
+
+      <!-- NEWSLETTER -->
+      <div class="newsletter rev">
+        <div class="nl-title">Receba conteúdo <em>exclusivo</em></div>
+        <p class="nl-sub">Artigos, reflexões e aprendizados sobre mentalidade, negócios e crescimento.<br>Sem spam. Só valor.</p>
+        <div class="nl-form">
+          <input type="email" class="nl-input" placeholder="Seu melhor e-mail" id="nl-email">
+          <button class="nl-btn" onclick="nlSubmit()">Entrar ⚜️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-card">
+        <div class="sb-title">eBook em destaque</div>
+        <div class="sb-ebook">
+          <div class="sb-ebook-img">📖</div>
+          <div class="sb-ebook-name">Mentalidade Rica VS Mentalidade Pobre</div>
+          <div class="sb-ebook-desc">O eBook que revela o que separa quem constrói riqueza de quem apenas sobrevive.</div>
+          <a href="empire-ebook.html" class="sb-btn">Garantir por R$ 29,90</a>
+          <a href="empire-ebook.html" class="sb-btn outline">Saber mais →</a>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sb-title">Mais lidos</div>
+        <div class="pop-list">
+          <div class="pop-item" onclick="openArticle(0)">
+            <div class="pop-num">01</div>
+            <div><div class="pop-title">A diferença entre pensar em rico e pensar como rico</div><div class="pop-cat">Mentalidade</div></div>
+          </div>
+          <div class="pop-item" onclick="openArticle(1)">
+            <div class="pop-num">02</div>
+            <div><div class="pop-title">Por que motivação não funciona</div><div class="pop-cat">Disciplina</div></div>
+          </div>
+          <div class="pop-item" onclick="openArticle(5)">
+            <div class="pop-num">03</div>
+            <div><div class="pop-title">5 crenças que te mantêm pobre</div><div class="pop-cat">Mentalidade</div></div>
+          </div>
+          <div class="pop-item" onclick="openArticle(8)">
+            <div class="pop-num">04</div>
+            <div><div class="pop-title">Renda passiva com 19 anos</div><div class="pop-cat">Investimento</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sb-title">Tags</div>
+        <div class="tags-wrap">
+          <div class="tag">#mentalidade</div>
+          <div class="tag">#empreendedorismo</div>
+          <div class="tag">#investimento</div>
+          <div class="tag">#disciplina</div>
+          <div class="tag">#liberdade</div>
+          <div class="tag">#fé</div>
+          <div class="tag">#negóciosdigitais</div>
+          <div class="tag">#rendapassiva</div>
+          <div class="tag">#19anos</div>
+          <div class="tag">#EmpireBuilders</div>
+        </div>
+      </div>
+
+      <div class="sidebar-card" style="text-align:center">
+        <div class="sb-title">Siga o Fabrício</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">Conteúdo diário sobre construção de impérios</p>
+        <a href="https://www.instagram.com/_fabricio_ce" target="_blank" class="sb-btn" style="margin-bottom:8px">📱 @_fabricio_ce</a>
+        <a href="https://www.tiktok.com/@caminho_do_empresario" target="_blank" class="sb-btn outline">🎵 TikTok</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.9);overflow-y:auto;padding:40px 24px">
+  <div style="max-width:680px;margin:0 auto;background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden;position:relative">
+    <div style="position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gbdr),transparent)"></div>
+    <button onclick="closeModal()" style="position:absolute;top:20px;right:20px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:22px;z-index:10">×</button>
+    <div id="modal-content" style="padding:40px 36px"></div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 <a href="fabricio.html">Fabrício CE</a> · <a href="https://linktr.ee/caminhodoempresario" target="_blank">Empire Builders</a> · Caminho do Empresário</p>
+</footer>
+
+<script>
+/* CANVAS */
+(function(){
+  const c=document.getElementById('bgc'),x=c.getContext('2d');
+  let W,H,P=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  for(let i=0;i<35;i++)P.push({X:Math.random()*2000,Y:Math.random()*2000,vx:(Math.random()-.5)*.08,vy:-(Math.random()*.15+.03),o:Math.random()*.22+.03,r:Math.random()*1.2+.2});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{
+      if(p.X>W)p.X=0;if(p.X<0)p.X=W;
+      x.beginPath();x.arc(p.X,p.Y,p.r,0,Math.PI*2);
+      x.fillStyle=`rgba(201,168,76,${p.o})`;x.fill();
+      p.X+=p.vx;p.Y+=p.vy;
+      if(p.Y<-5){p.Y=H+5;p.X=Math.random()*W}
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* ARTICLES DATA */
+const ARTICLES=[
+  {
+    cat:"🧠 Mentalidade",icon:"🧠",
+    title:"A diferença entre quem pensa em rico e quem pensa como rico",
+    time:"5 min",
+    content:`
+      <p>Existe uma diferença fundamental entre dois tipos de pessoas: as que <strong>pensam sobre</strong> ser rico — que fantasiam, que admiram, que desejam — e as que <strong>pensam como</strong> um construtor de riqueza pensa.</p>
+      <p>Não é sobre quanto você ganha hoje. É sobre como sua mente processa o dinheiro, as oportunidades e os riscos.</p>
+      <h3>O que separa os dois grupos</h3>
+      <p>Quem pensa em rico vê o dinheiro como destino. Quem pensa como rico vê o dinheiro como instrumento.</p>
+      <p>Quem pensa em rico espera a oportunidade certa. Quem pensa como rico cria as condições para as oportunidades aparecerem.</p>
+      <p>Quem pensa em rico gasta o que sobra depois de consumir. Quem pensa como rico investe primeiro e vive com o que sobra.</p>
+      <h3>A reprogramação começa nas perguntas</h3>
+      <p>Quando algo dá errado financeiramente, qual é a sua primeira pergunta? "Por que sempre acontece comigo?" ou "O que posso aprender com isso?"</p>
+      <p>A pergunta que você faz determina o tipo de resposta que sua mente vai buscar. E as respostas que você busca determinam as ações que você toma.</p>
+      <p><strong>Silêncio agora. Resultado depois.</strong></p>
+    `
+  },
+  {
+    cat:"⚔️ Disciplina",icon:"⚔️",
+    title:"Por que motivação não funciona — e o que funciona de verdade",
+    time:"3 min",
+    content:`
+      <p>Motivação é uma emoção. E emoções são temporárias. Ninguém consegue manter o mesmo nível de entusiasmo por semanas, meses ou anos.</p>
+      <p>O problema é que a maioria das pessoas espera se sentir motivada para agir. Mas os que constroem algo grande agem independentemente de como se sentem.</p>
+      <h3>O que substitui a motivação</h3>
+      <p><strong>Sistemas.</strong> Hábitos. Rotinas que não dependem de humor.</p>
+      <p>Quando você cria um sistema — um horário fixo, um ambiente preparado, uma sequência automática — você remove a necessidade de decidir. E a decisão é onde a maioria falha.</p>
+      <h3>O segredo dos top performers</h3>
+      <p>Eles não são mais motivados que você. Eles simplesmente construíram estruturas que tornam o não-fazer mais difícil do que o fazer.</p>
+      <p>Disciplina vence talento quando talento não tem disciplina.</p>
+    `
+  },
+  {
+    cat:"🚀 Negócios",icon:"🚀",
+    title:"Como começar um negócio digital com R$0",
+    time:"7 min",
+    content:`
+      <p>A internet eliminou a maioria das barreiras de entrada para criar um negócio. O que antes exigia aluguel, estoque e funcionários, hoje pode ser iniciado com um celular e conexão.</p>
+      <h3>O modelo mais simples que existe</h3>
+      <p>1. Você sabe algo que outras pessoas não sabem.<br>2. Essas pessoas têm um problema que você pode resolver.<br>3. Você cria conteúdo que mostra como resolver esse problema.<br>4. Você monetiza através de produtos, serviços ou parceiros.</p>
+      <h3>Onde começar hoje</h3>
+      <p>Escolha UMA plataforma. Instagram, TikTok ou YouTube. Não as três. Uma. Poste conteúdo sobre um tema específico todos os dias por 90 dias sem parar.</p>
+      <p>A consistência é o único diferencial que você precisa no começo. Todo o resto vem com o tempo.</p>
+      <h3>O erro mais comum</h3>
+      <p>Esperar ter um produto antes de construir audiência. Construa a audiência primeiro. O produto vem naturalmente quando você entende o que elas precisam.</p>
+    `
+  },
+  {
+    cat:"📈 Investimento",icon:"📈",
+    title:"Investir com R$100: o guia para quem está começando",
+    time:"6 min",
+    content:`
+      <p>R$100 parece pouco. E é. Mas não é sobre o valor inicial — é sobre o hábito de investir.</p>
+      <p>Quem começa investindo R$100 aprende como funciona o mercado, desenvolve disciplina financeira e, mais importante, cria o hábito de priorizar o futuro sobre o presente.</p>
+      <h3>Por onde começar</h3>
+      <p><strong>Tesouro Selic:</strong> seguro, líquido, rende mais que poupança. Ideal para reserva de emergência.</p>
+      <p><strong>CDB de banco digital:</strong> muitos rendem 100-120% do CDI com liquidez diária. Nubank, Inter, PicPay.</p>
+      <p><strong>Fundos de renda fixa:</strong> diversificação automática com baixo valor mínimo.</p>
+      <h3>A regra do 1%</h3>
+      <p>Aumente seu investimento em 1% da sua renda a cada mês. Em 1 ano você vai de 5% para 17% sem sentir impacto grande.</p>
+      <p>Dinheiro parado é dinheiro morrendo. Qualquer valor investido hoje vale mais do que o dobro não investido amanhã.</p>
+    `
+  },
+  {
+    cat:"✝️ Fé",icon:"✝️",
+    title:"Fé não é fraqueza — é a base de todo grande construtor",
+    time:"4 min",
+    content:`
+      <p>"Tudo posso naquele que me fortalece." — Filipenses 4:13</p>
+      <p>Existe um padrão entre as pessoas que constroem algo extraordinário: elas têm uma crença que vai além do que os olhos podem ver.</p>
+      <p>Não é ingenuidade. É a capacidade de continuar construindo quando os resultados ainda não apareceram, quando as pessoas ao redor duvidam, quando os números não fecham.</p>
+      <h3>Fé como vantagem competitiva</h3>
+      <p>No mundo dos negócios, a maioria age apenas quando há evidências suficientes de que vai funcionar. Isso significa que eles chegam sempre depois dos que tiveram fé suficiente para começar antes.</p>
+      <p>Fé não remove os obstáculos. Ela dá força para atravessá-los.</p>
+      <h3>O que pratico todos os dias</h3>
+      <p>Antes de começar qualquer coisa importante, paro. Respiro. Lembro do propósito. Entrego o resultado para Deus e foco apenas no processo.</p>
+      <p>Trabalho como se dependesse de mim. Confio como se dependesse d'Ele.</p>
+    `
+  },
+  {
+    cat:"🧠 Mentalidade",icon:"💡",
+    title:"5 crenças que te mantêm pobre sem você perceber",
+    time:"5 min",
+    content:`
+      <p>Crenças são programas que rodam em segundo plano na sua mente. Você nem percebe que estão lá, mas elas determinam cada decisão financeira que você toma.</p>
+      <h3>1. "Dinheiro não é tudo"</h3>
+      <p>Verdade. Mas a ausência de dinheiro é quase tudo. Essa crença justifica não priorizar a inteligência financeira.</p>
+      <h3>2. "Ricos são desonestos"</h3>
+      <p>Associar riqueza a desonestidade faz sua mente resistir inconscientemente a acumular dinheiro.</p>
+      <h3>3. "Não é para mim"</h3>
+      <p>A crença mais paralisante. Geralmente implantada pela família, escola ou ambiente de origem.</p>
+      <h3>4. "Quando tiver mais, começo a investir"</h3>
+      <p>O momento certo nunca chega. Invista agora com o que tem. O hábito importa mais que o valor.</p>
+      <h3>5. "Preciso de segurança antes de arriscar"</h3>
+      <p>Segurança total nunca existe. Risco calculado é o único caminho para crescimento real.</p>
+      <p><strong>Identifique qual dessas crenças está mais ativa em você. Esse é o primeiro passo para mudá-la.</strong></p>
+    `
+  },
+  {
+    cat:"🚀 Negócios",icon:"📱",
+    title:"Conteúdo digital: como transformar conhecimento em renda",
+    time:"8 min",
+    content:`
+      <p>Você já sabe algo que outras pessoas pagariam para aprender. Pode ser culinária, finanças pessoais, exercícios, idiomas, produtividade. Qualquer conhecimento tem valor para alguém.</p>
+      <h3>O modelo de criador de conteúdo</h3>
+      <p>Fase 1 — Educação: você compartilha conteúdo gratuito e constrói audiência.<br>Fase 2 — Autoridade: as pessoas passam a te ver como referência.<br>Fase 3 — Monetização: você lança um produto ou serviço para essa audiência.</p>
+      <h3>Formatos que mais convertem</h3>
+      <p><strong>Carrosséis no Instagram:</strong> educam, salvam e engajam.<br><strong>Reels e TikToks:</strong> alcance orgânico ainda é enorme.<br><strong>E-books:</strong> produto de entrada com ticket baixo e margem alta.<br><strong>Mentorias:</strong> ticket alto para quem já tem autoridade.</p>
+      <h3>A única coisa que importa no começo</h3>
+      <p>Consistência. Poste todo dia por 90 dias antes de avaliar os resultados. A maioria desiste no dia 30. Quem passa do dia 90 já está à frente de 95% dos criadores.</p>
+    `
+  },
+  {
+    cat:"⚔️ Disciplina",icon:"🌅",
+    title:"A rotina matinal que muda tudo em 90 dias",
+    time:"5 min",
+    content:`
+      <p>Não é sobre acordar às 4h da manhã. É sobre o que você faz nas primeiras horas do dia — antes do mundo começar a puxar sua atenção para todos os lados.</p>
+      <h3>A rotina que pratico</h3>
+      <p><strong>5:30</strong> — Acordo. Sem celular. Água gelada.<br><strong>5:45</strong> — Oração e meditação. 15 minutos.<br><strong>6:00</strong> — Exercício. 30-45 minutos.<br><strong>6:50</strong> — Leitura. 20-30 páginas.<br><strong>7:30</strong> — Planejamento do dia. 3 prioridades.<br><strong>8:00</strong> — Começo a trabalhar na tarefa mais importante.</p>
+      <h3>Por que isso funciona</h3>
+      <p>Quando você controla as primeiras horas do dia, você já venceu antes do mundo acordar. Cada hábito completado de manhã é uma pequena vitória que cria momentum para o resto do dia.</p>
+      <h3>Como implementar</h3>
+      <p>Não tente fazer tudo de uma vez. Adicione um hábito por semana. Em 6 semanas você tem uma rotina completa sem a sensação de força.</p>
+    `
+  },
+  {
+    cat:"📈 Investimento",icon:"💰",
+    title:"Renda passiva com 19 anos: é possível?",
+    time:"6 min",
+    content:`
+      <p>Sim. E a melhor parte: quem começa mais cedo tem uma vantagem matemática que é impossível de replicar mais tarde. É o poder dos juros compostos.</p>
+      <h3>O que aprendi aos 19</h3>
+      <p>A maioria das pessoas de 19 anos gasta 100% do que ganha em experiências do presente. Eu decidi gastar 80% e investir 20% em experiências do futuro.</p>
+      <p>Não foi fácil. Mas cada real investido com 19 anos vale muito mais do que o mesmo real investido com 30.</p>
+      <h3>As 3 fontes que estou construindo</h3>
+      <p><strong>1. Conteúdo digital:</strong> uma vez criado, continua gerando resultado.<br><strong>2. Investimentos financeiros:</strong> renda fixa e variável compondo ao longo do tempo.<br><strong>3. Produto digital:</strong> eBook e curso que vendem enquanto durmo.</p>
+      <h3>A vantagem de começar jovem</h3>
+      <p>R$200/mês investidos a 10% ao ano por 10 anos = R$41.000.<br>Os mesmos R$200/mês por 30 anos = R$452.000.</p>
+      <p>O tempo é o maior ativo de quem tem 19 anos. Não desperdice.</p>
+    `
+  },
+];
+
+function openArticle(idx){
+  const a=ARTICLES[idx];
+  const content=`
+    <div style="font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:14px">${a.cat} · ${a.time} de leitura</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:clamp(22px,4vw,32px);font-weight:800;color:var(--white);line-height:1.1;margin-bottom:24px;letter-spacing:-0.5px">${a.title}</h2>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--gdim);border:1px solid var(--gbdr);display:flex;align-items:center;justify-content:center;font-size:16px">⚜️</div>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white)">Fabrício CE</div>
+        <div style="font-size:10px;color:var(--muted)">Empire Builders · Caminho do Empresário</div>
+      </div>
+    </div>
+    <div style="font-size:15px;color:var(--text);line-height:1.9" id="article-body">${a.content}</div>
+    <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border)">
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Continue sua jornada</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <a href="empire-ebook.html" style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--gdim);border:1px solid var(--gbdr);border-radius:4px;text-decoration:none">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white)">📖 eBook: Mentalidade Rica VS Pobre</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Aprofunde esse conteúdo</div>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--gold)">R$29,90 →</div>
+        </a>
+        <a href="empire-mindset.html" style="display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);border:1px solid var(--border);border-radius:4px;text-decoration:none">
+          <div>
+            <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--white)">🧠 Teste sua mentalidade agora</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px">Quiz Empire Mindset — gratuito</div>
+          </div>
+          <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:800;color:var(--gold)">Fazer →</div>
+        </a>
+      </div>
+    </div>`;
+  document.getElementById('modal-content').innerHTML=content;
+  // Style article body
+  const body=document.getElementById('article-body');
+  body.querySelectorAll('p').forEach(p=>{p.style.marginBottom='16px'});
+  body.querySelectorAll('h3').forEach(h=>{h.style.cssText='font-family:Syne,sans-serif;font-size:16px;font-weight:800;color:var(--white);margin:24px 0 10px;letter-spacing:-0.3px'});
+  document.getElementById('modal').style.display='block';
+  document.body.style.overflow='hidden';
+}
+
+function closeModal(){
+  document.getElementById('modal').style.display='none';
+  document.body.style.overflow='';
+}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+
+function filterCat(el,cat){
+  document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.article-card[data-cat]').forEach(card=>{
+    card.style.display=(cat==='todos'||card.dataset.cat===cat)?'block':'none';
+  });
+}
+
+function nlSubmit(){
+  const email=document.getElementById('nl-email').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('nl-email').style.borderColor='rgba(220,60,60,.4)';return}
+  fetch('https://formsubmit.co/ajax/Evolutionaron@gmail.com',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify({email,_subject:'🔥 Novo inscrito no Blog Empire Builders ⚜️',origem:'Blog empire-blog.html'})
+  }).catch(()=>{});
+  window.location.href='obrigado.html';
+}
+
+/* REVEAL */
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.rev').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

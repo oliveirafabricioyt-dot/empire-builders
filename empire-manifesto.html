@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Manifesto ⚜️ | Fabrício CE · Empire Builders</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#020202;--gold:#C9A84C;--gold2:#E8C96A;
+  --white:#F5F2EC;--white2:#C8C0B4;--muted:#404040;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--white2);font-family:'Cormorant Garamond',serif;overflow:hidden;cursor:none}
+
+canvas#bgc{position:fixed;inset:0;z-index:0}
+
+/* CURSOR */
+#cur{position:fixed;z-index:9999;pointer-events:none;width:6px;height:6px;background:var(--gold);border-radius:50%;transform:translate(-50%,-50%);transition:left .05s,top .05s}
+
+/* BRAND */
+.brand{position:fixed;top:24px;left:40px;right:40px;z-index:100;display:flex;justify-content:space-between;align-items:center}
+.b-logo{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--gold);opacity:0;animation:fade 1s 0.5s ease forwards}
+.b-skip{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .3s;opacity:0;animation:fade 1s 1s ease forwards}
+.b-skip:hover{color:var(--gold)}
+
+/* PROGRESS */
+.progress{position:fixed;bottom:24px;left:40px;right:40px;z-index:100;display:flex;align-items:center;gap:16px;opacity:0;animation:fade 1s 1s ease forwards}
+.prog-track{flex:1;height:1px;background:rgba(255,255,255,.08)}
+.prog-fill{height:100%;background:var(--gold);width:0%;transition:width .8s ease}
+.prog-num{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--muted);min-width:32px;text-align:right}
+
+/* CHAPTERS */
+.chapter{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:80px 40px;opacity:0;pointer-events:none;transition:opacity .8s ease}
+.chapter.active{opacity:1;pointer-events:auto}
+
+.ch-inner{max-width:680px;text-align:center}
+
+/* TYPES */
+.line-small{font-size:clamp(12px,2vw,16px);letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:20px;opacity:0;transform:translateY(12px);transition:opacity .7s ease,transform .7s ease}
+.line-big{font-size:clamp(32px,6vw,72px);font-weight:600;color:var(--white);line-height:.95;letter-spacing:-1px;margin-bottom:20px;opacity:0;transform:translateY(16px);transition:opacity .7s .1s ease,transform .7s .1s ease}
+.line-big .g{color:var(--gold)}
+.line-big .o{-webkit-text-stroke:1px rgba(245,242,236,.2);color:transparent}
+.line-italic{font-style:italic;font-size:clamp(18px,3vw,28px);color:var(--white2);line-height:1.5;margin-bottom:20px;opacity:0;transform:translateY(12px);transition:opacity .7s .2s ease,transform .7s .2s ease}
+.line-body{font-size:clamp(14px,2vw,18px);color:rgba(200,192,180,.7);line-height:1.8;max-width:520px;margin:0 auto 20px;opacity:0;transform:translateY(10px);transition:opacity .7s .25s ease,transform .7s .25s ease}
+.line-accent{font-family:'Syne',sans-serif;font-size:clamp(20px,3.5vw,36px);font-weight:800;color:var(--gold);letter-spacing:-0.5px;opacity:0;transform:translateY(12px);transition:opacity .7s .3s ease,transform .7s .3s ease}
+.line-verse{font-style:italic;font-size:clamp(16px,2.5vw,22px);color:rgba(201,168,76,.8);line-height:1.6;opacity:0;transform:translateY(10px);transition:opacity .7s .35s ease,transform .7s .35s ease;border-left:2px solid rgba(201,168,76,.3);padding-left:20px;text-align:left;max-width:480px;margin:0 auto}
+.line-ref{font-family:'Syne',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:10px;opacity:0;transform:translateY(8px);transition:opacity .7s .4s ease,transform .7s .4s ease}
+
+.chapter.active .line-small,
+.chapter.active .line-big,
+.chapter.active .line-italic,
+.chapter.active .line-body,
+.chapter.active .line-accent,
+.chapter.active .line-verse,
+.chapter.active .line-ref{opacity:1;transform:translateY(0)}
+
+/* DIVIDER */
+.divider{width:40px;height:1px;background:var(--gold);margin:24px auto;opacity:0;transform:scaleX(0);transition:opacity .5s .15s ease,transform .5s .15s ease;transform-origin:center}
+.chapter.active .divider{opacity:.5;transform:scaleX(1)}
+
+/* EMBLEM */
+.emblem{font-size:48px;margin-bottom:24px;opacity:0;transform:scale(.8);transition:opacity .6s ease,transform .6s ease;display:block}
+.chapter.active .emblem{opacity:1;transform:scale(1)}
+
+/* FINAL CTA */
+.cta-row{display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0;transform:translateY(14px);transition:opacity .7s .4s ease,transform .7s .4s ease}
+.chapter.active .cta-row{opacity:1;transform:translateY(0)}
+.btn-follow{display:inline-flex;align-items:center;gap:10px;padding:15px 36px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:3px;font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#020202;cursor:pointer;text-decoration:none;transition:all .3s}
+.btn-follow:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,.3)}
+.btn-restart{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);background:none;border:none;cursor:pointer;transition:color .3s;padding:8px}
+.btn-restart:hover{color:var(--gold)}
+
+/* CLICK HINT */
+.click-hint{position:fixed;bottom:54px;left:50%;transform:translateX(-50%);font-family:'Syne',sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);z-index:100;display:flex;align-items:center;gap:8px;opacity:0;animation:fade 1s 2s ease forwards}
+.hint-line{width:20px;height:1px;background:var(--muted);animation:hpulse 1.5s ease-in-out infinite}
+@keyframes hpulse{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fade{to{opacity:1}}
+
+/* GLOW */
+.ch-glow{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;border-radius:50%;pointer-events:none;opacity:0;transition:opacity .8s ease}
+.chapter.active .ch-glow{opacity:1}
+
+@media(max-width:560px){
+  .brand{left:24px;right:24px}
+  .progress{left:24px;right:24px;bottom:16px}
+  .chapter{padding:70px 24px}
+  .line-big{letter-spacing:-0.5px}
+}
+</style>
+</head>
+<body>
+<canvas id="bgc"></canvas>
+<div id="cur"></div>
+
+<div class="brand">
+  <div class="b-logo">CE ⚜️ <span style="color:rgba(200,192,180,.5)">Fabrício</span></div>
+  <button class="b-skip" onclick="skipToEnd()">Pular →</button>
+</div>
+
+<div class="progress">
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <div class="prog-num" id="prog-num">0/9</div>
+</div>
+
+<div class="click-hint" id="hint">
+  <div class="hint-line"></div>
+  Toque para continuar
+  <div class="hint-line"></div>
+</div>
+
+<!-- CHAPTER 1: ABERTURA -->
+<div class="chapter" id="ch0">
+  <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(201,168,76,.05) 0%,transparent 65%);pointer-events:none"></div>
+  <div class="ch-inner">
+    <span class="emblem">⚜️</span>
+    <div class="line-small">CE · Caminho do Empresário · 2026</div>
+    <div class="line-big">O<br><span class="g">Manifesto</span></div>
+    <div class="line-italic">"Para os que escolheram construir."</div>
+  </div>
+</div>
+
+<!-- CHAPTER 2 -->
+<div class="chapter" id="ch1">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo I</div>
+    <div class="line-big">A maioria<br><span class="o">existe.</span></div>
+    <div class="divider"></div>
+    <div class="line-body">Acordam. Trabalham. Dormem. Repetem.<br>Aguardam uma vida que nunca foi planejada para chegar.</div>
+    <div class="line-accent">Poucos escolhem viver.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 3 -->
+<div class="chapter" id="ch2">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo II</div>
+    <div class="line-big">Eu nasci<br>sem <span class="g">manual.</span></div>
+    <div class="divider"></div>
+    <div class="line-body">Sem herança. Sem atalho.<br>Apenas uma mente inquieta que se recusou a aceitar os limites do ambiente onde cresci.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 4 -->
+<div class="chapter" id="ch3">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo III · Fé</div>
+    <div class="line-verse">"Porque sou eu que conheço os planos que tenho para vocês, planos de fazê-los prosperar e não de causar dano, planos de dar a vocês esperança e um futuro."</div>
+    <div class="line-ref">— Jeremias 29:11</div>
+    <div class="divider"></div>
+    <div class="line-italic">A fé não remove os obstáculos.<br>Ela me dá força para atravessá-los.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 5 -->
+<div class="chapter" id="ch4">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo IV · Disciplina</div>
+    <div class="line-big">Enquanto<br>dormem,<br>eu <span class="g">construo.</span></div>
+    <div class="divider"></div>
+    <div class="line-body">Não é sobre trabalhar mais.<br>É sobre trabalhar com mais <em>intenção.</em><br>Cada hora tem um propósito.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 6 -->
+<div class="chapter" id="ch5">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo V · Empire Builders</div>
+    <div class="line-big">Não estou<br>competindo<br>com <span class="o">ninguém.</span></div>
+    <div class="divider"></div>
+    <div class="line-accent">Estou construindo meu legado.</div>
+    <div class="line-body" style="margin-top:16px">O único adversário é a versão de mim de ontem.<br>E ela já ficou para trás.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 7 -->
+<div class="chapter" id="ch6">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo VI · Silêncio</div>
+    <div class="line-big"><span class="g">Silêncio</span><br>agora.</div>
+    <div class="line-big" style="transition-delay:.2s">Resultado<br>depois.</div>
+    <div class="divider"></div>
+    <div class="line-body">Os que mais falam sobre o que vão fazer<br>raramente fazem.<br>Os que constroem em silêncio surpreendem o mundo.</div>
+  </div>
+</div>
+
+<!-- CHAPTER 8 -->
+<div class="chapter" id="ch7">
+  <div class="ch-inner">
+    <div class="line-small">Capítulo VII · O Chamado</div>
+    <div class="line-italic">"Uma minoria extremamente rara muda o mundo."</div>
+    <div class="divider"></div>
+    <div class="line-body">Essa minoria não nasceu diferente.<br>Ela <em>escolheu</em> ser diferente.<br>Todos os dias. Em cada decisão. Sem plateia.</div>
+    <div class="line-accent" style="margin-top:16px">Você é essa minoria?</div>
+  </div>
+</div>
+
+<!-- CHAPTER 9: FINAL -->
+<div class="chapter" id="ch8">
+  <div style="position:absolute;inset:0;background:radial-gradient(circle,rgba(201,168,76,.07) 0%,transparent 65%);pointer-events:none;animation:gpulse 4s ease-in-out infinite"></div>
+  <div class="ch-inner">
+    <span class="emblem" style="transition-delay:.1s">⚜️</span>
+    <div class="line-small">Fabrício CE · Empire Builders</div>
+    <div class="line-big">Bem-vindo ao<br><span class="g">Caminho.</span></div>
+    <div class="divider"></div>
+    <div class="line-body">Essa jornada não é sobre dinheiro.<br>É sobre quem você se torna no processo de construir.</div>
+    <div class="cta-row">
+      <a href="https://www.instagram.com/_fabricio_ce" target="_blank" class="btn-follow">📱 Seguir @_fabricio_ce</a>
+      <a href="https://linktr.ee/caminhodoempresario" target="_blank" style="font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:8px;transition:color .3s" onmouseover="this.style.color='#C9A84C'" onmouseout="this.style.color=''">⚜️ linktr.ee/caminhodoempresario</a>
+      <button class="btn-restart" onclick="restart()">↺ Ver novamente</button>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes gpulse{0%,100%{opacity:.4}50%{opacity:.9}}
+</style>
+
+<script>
+/* CANVAS */
+(function(){
+  const c=document.getElementById('bgc'),x=c.getContext('2d');
+  let W,H,P=[];
+  function rs(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  rs();window.addEventListener('resize',rs);
+  for(let i=0;i<60;i++)P.push({X:Math.random()*3000,Y:Math.random()*3000,vx:(Math.random()-.5)*.08,vy:-(Math.random()*.15+.03),o:Math.random()*.25+.03,r:Math.random()*1.2+.2});
+  function draw(){
+    x.clearRect(0,0,W,H);
+    P.forEach(p=>{
+      if(p.X>W)p.X=0;if(p.X<0)p.X=W;
+      x.beginPath();x.arc(p.X,p.Y,p.r,0,Math.PI*2);
+      x.fillStyle=`rgba(201,168,76,${p.o})`;x.fill();
+      p.X+=p.vx;p.Y+=p.vy;
+      if(p.Y<-5){p.Y=H+5;p.X=Math.random()*W}
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+
+/* CURSOR */
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px'});
+
+/* CHAPTERS */
+const TOTAL=9;
+let current=0,canAdvance=true;
+
+function show(idx){
+  document.querySelectorAll('.chapter').forEach((c,i)=>{
+    c.classList.toggle('active',i===idx);
+  });
+  const pct=Math.round((idx/(TOTAL-1))*100);
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-num').textContent=`${idx+1}/${TOTAL}`;
+  document.getElementById('hint').style.display=idx===TOTAL-1?'none':'flex';
+  canAdvance=false;
+  setTimeout(()=>canAdvance=true,800);
+}
+
+function next(){
+  if(!canAdvance)return;
+  if(current<TOTAL-1){current++;show(current)}
+}
+
+function skipToEnd(){current=TOTAL-1;show(current)}
+function restart(){current=0;show(0)}
+
+// Click/tap to advance
+document.addEventListener('click',e=>{
+  if(e.target.closest('a,button'))return;
+  next();
+});
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '||e.key==='Enter')next();
+  if(e.key==='ArrowLeft'&&current>0){current--;show(current)}
+});
+
+// Touch swipe
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)<30&&!e.target.closest('a,button'))next();
+  else if(dx>60&&current>0){current--;show(current)}
+  else if(dx<-60)next();
+});
+
+// Auto advance every 7s
+let autoTimer=setInterval(()=>{
+  if(current<TOTAL-1){current++;show(current)}
+  else clearInterval(autoTimer);
+},7000);
+
+document.addEventListener('click',()=>{clearInterval(autoTimer)});
+
+show(0);
+</script>
+</body>
+</html>
